@@ -1,0 +1,67 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### === 以下是为 Spring Boot 新增的重要配置 === ###
+
+### 敏感配置文件（包含密码、密钥等）###
+application.yml
+application-*.yml
+application.properties
+application-*.properties
+bootstrap.yml
+bootstrap-*.yml
+
+### 环境变量文件 ###
+.env
+.env.*
+*.env
+
+### 密钥和证书文件 ###
+*.p12
+*.jks
+*.key
+*.pem
+*.crt
+secrets.yml
+
+### 日志文件 ###
+*.log
+logs/
+
+### 本地临时文件 ###
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
