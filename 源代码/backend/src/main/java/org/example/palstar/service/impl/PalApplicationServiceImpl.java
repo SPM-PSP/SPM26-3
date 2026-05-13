@@ -23,6 +23,9 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
     @Autowired
     private PalPostMapper postMapper;
 
+    @Autowired
+    private org.example.palstar.service.IGroupChatService groupChatService;
+
     @Override
     @Transactional
     public PalPostApplicationResponse apply(Long userId, Long postId, PalPostApplicationCreateRequest request) {
@@ -104,11 +107,11 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
         if (application == null) {
             throw new RuntimeException("Application not found");
         }
-        if (request.getStatus() == null || (request.getStatus() != 1 && request.getStatus() != 2)) {
+        if (request.getStatus() == null || (request.getStatus()!= 1 && request.getStatus()!= 2)) {
             throw new RuntimeException("Invalid review status");
         }
 
-        if (application.getStatus() != null && application.getStatus() != 0) {
+        if (application.getStatus() != null && application.getStatus()!= 0) {
             throw new RuntimeException("Application already reviewed");
         }
 
@@ -119,7 +122,7 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
         application.setUpdatedAt(LocalDateTime.now());
         updateById(application);
 
-        if (request.getStatus() == 1) {
+        if (request.getStatus()== 1) {
             int nextCount = post.getCurrentCount() != null ? post.getCurrentCount() + 1 : 1;
             post.setCurrentCount(nextCount);
             if (post.getExpectedCount() != null && nextCount >= post.getExpectedCount()) {
@@ -127,6 +130,15 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
             }
             post.setUpdatedAt(LocalDateTime.now());
             postMapper.updateById(post);
+
+            // 审批通过后自动创建群聊
+            String groupName = "【结伴】" + post.getScene() + " " + post.getStartTime().toLocalDate();
+            groupChatService.createGroup(
+                    post.getId(),                  // 帖子ID
+                    post.getAuthorId(),            // 群主（发帖人）
+                    application.getApplicantId(),  // 申请人
+                    groupName
+            );
         }
 
         return toResponse(application);
