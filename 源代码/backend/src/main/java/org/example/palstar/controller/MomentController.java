@@ -10,12 +10,14 @@ import org.example.palstar.dto.MomentFavoriteResponse;
 import org.example.palstar.dto.MomentLikeResponse;
 import org.example.palstar.dto.MomentResponse;
 import org.example.palstar.dto.MomentUpdateRequest;
+import org.example.palstar.dto.MyCommentResponse;
+import org.example.palstar.dto.MyLikedMomentResponse;
 import org.example.palstar.service.IMomentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/moment")
+@RequestMapping("/api/v1/moments")
 public class MomentController {
 
     @Autowired
@@ -155,6 +157,39 @@ public class MomentController {
             return ApiResponse.successMessage("删除成功");
         } catch (Exception e) {
             return ApiResponse.error(500, "删除失败: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/me/likes")
+    public ApiResponse<List<MyLikedMomentResponse>> getMyLikedMoments(HttpServletRequest request) {
+        try {
+            Long userId = (Long) request.getAttribute("userId");
+            List<MyLikedMomentResponse> response = momentService.getMyLikedMoments(userId);
+            return ApiResponse.success("查询成功", response);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "查询点赞列表失败: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/me/favorites")
+    public ApiResponse<List<MyLikedMomentResponse>> getMyFavoritedMoments(HttpServletRequest request) {
+        try {
+            Long userId = (Long) request.getAttribute("userId");
+            List<MyLikedMomentResponse> response = momentService.getMyFavoritedMoments(userId);
+            return ApiResponse.success("查询成功", response);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "查询收藏列表失败: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/me/comments")
+    public ApiResponse<List<MyCommentResponse>> getMyComments(HttpServletRequest request) {
+        try {
+            Long userId = (Long) request.getAttribute("userId");
+            List<MyCommentResponse> response = momentService.getMyComments(userId);
+            return ApiResponse.success("查询成功", response);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "查询评论列表失败: " + e.getMessage());
         }
     }
 }
