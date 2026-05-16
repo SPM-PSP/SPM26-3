@@ -15,4 +15,6 @@ public interface IPalApplicationService extends IService<PalApplication> {
     PalPostApplicationResponse review(Long userId, Long postId, Long applicationId, PalPostApplicationReviewRequest request);
 
     PalPostApplicationResponse cancel(Long userId, Long postId, Long applicationId);
+
+    List<PalPostApplicationResponse> listMyApplications(Long userId);
 }

@@ -9,6 +9,8 @@ import org.example.palstar.dto.MomentFavoriteResponse;
 import org.example.palstar.dto.MomentLikeResponse;
 import org.example.palstar.dto.MomentResponse;
 import org.example.palstar.dto.MomentUpdateRequest;
+import org.example.palstar.dto.MyCommentResponse;
+import org.example.palstar.dto.MyLikedMomentResponse;
 import org.example.palstar.entity.Moment;
 
 public interface IMomentService extends IService<Moment> {
@@ -35,4 +37,10 @@ public interface IMomentService extends IService<Moment> {
     List<MomentCommentResponse> listComments(Long momentId);
 
     void deleteComment(Long userId, Long commentId);
+
+    List<MyLikedMomentResponse> getMyLikedMoments(Long userId);
+
+    List<MyLikedMomentResponse> getMyFavoritedMoments(Long userId);
+
+    List<MyCommentResponse> getMyComments(Long userId);
 }

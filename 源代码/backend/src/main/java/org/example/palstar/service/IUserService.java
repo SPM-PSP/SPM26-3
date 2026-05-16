@@ -9,6 +9,7 @@ import org.example.palstar.dto.WechatLoginRequest;
 import org.example.palstar.entity.User;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface IUserService extends IService<User> {
     User findByOpenid(String openid);
@@ -23,9 +24,15 @@ public interface IUserService extends IService<User> {
 
     void revokeCancellation(Long userId);
 
+    UserFollowResponse followUser(Long followerId, Long followingId);
+
+    void unfollowUser(Long followerId, Long followingId);
+
+    List<UserPublicProfileResponse> searchUsers(String keyword);
+
+    List<UserPublicProfileResponse> getFollowers(Long userId);
+
+    List<UserPublicProfileResponse> getFollowing(Long userId);
+
     void processUserCancellation(Long userId);
-
-    UserFollowResponse followUser(Long userId, Long targetUserId);
-
-    void unfollowUser(Long userId, Long targetUserId);
 }
