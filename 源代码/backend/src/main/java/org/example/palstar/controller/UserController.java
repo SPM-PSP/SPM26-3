@@ -1,5 +1,7 @@
 package org.example.palstar.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import org.example.palstar.common.ApiResponse;
 import org.example.palstar.dto.UserFollowResponse;
@@ -12,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1")
 public class UserController {
 
     @Autowired
     private IUserService userService;
 
-    @GetMapping("/profile")
+    @GetMapping("/user/profile")
     public ApiResponse<User> getUserProfile(HttpServletRequest request) {
         try {
             Long userId = (Long) request.getAttribute("userId");
@@ -29,7 +31,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/profile")
+    @PutMapping("/user/profile")
     public ApiResponse<User> updateUserProfile(@RequestBody UserProfileUpdateRequest payload, HttpServletRequest request) {
         try {
             Long userId = (Long) request.getAttribute("userId");
@@ -40,7 +42,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/profile")
+    @GetMapping("/user/{userId}/profile")
     public ApiResponse<UserPublicProfileResponse> getUserPublicProfile(@PathVariable Long userId,
                                                                         HttpServletRequest request) {
         try {
@@ -52,7 +54,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/cancellation/apply")
+    @PostMapping("/user/cancellation/apply")
     public ApiResponse<Void> applyForCancellation(HttpServletRequest request) {
         try {
             Long userId = (Long) request.getAttribute("userId");
@@ -63,7 +65,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/cancellation/revoke")
+    @PostMapping("/user/cancellation/revoke")
     public ApiResponse<Void> revokeCancellation(HttpServletRequest request) {
         try {
             Long userId = (Long) request.getAttribute("userId");
@@ -74,7 +76,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{userId}/follow")
+    @PostMapping("/user/{userId}/follow")
     public ApiResponse<UserFollowResponse> followUser(@PathVariable Long userId, HttpServletRequest request) {
         try {
             Long followerId = (Long) request.getAttribute("userId");
@@ -85,7 +87,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{userId}/follow")
+    @DeleteMapping("/user/{userId}/follow")
     public ApiResponse<Void> unfollowUser(@PathVariable Long userId, HttpServletRequest request) {
         try {
             Long followerId = (Long) request.getAttribute("userId");
@@ -93,6 +95,36 @@ public class UserController {
             return ApiResponse.successMessage("已取消关注");
         } catch (Exception e) {
             return ApiResponse.error(500, "取消关注失败: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/users/search")
+    public ApiResponse<List<UserPublicProfileResponse>> searchUsers(@RequestParam String keyword) {
+        try {
+            List<UserPublicProfileResponse> users = userService.searchUsers(keyword);
+            return ApiResponse.success("查询成功", users);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "搜索用户失败: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{userId}/followers")
+    public ApiResponse<List<UserPublicProfileResponse>> getFollowers(@PathVariable Long userId) {
+        try {
+            List<UserPublicProfileResponse> followers = userService.getFollowers(userId);
+            return ApiResponse.success("查询成功", followers);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "查询粉丝列表失败: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{userId}/following")
+    public ApiResponse<List<UserPublicProfileResponse>> getFollowing(@PathVariable Long userId) {
+        try {
+            List<UserPublicProfileResponse> following = userService.getFollowing(userId);
+            return ApiResponse.success("查询成功", following);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "查询关注列表失败: " + e.getMessage());
         }
     }
 }
