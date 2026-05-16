@@ -7,6 +7,7 @@
 发布结伴帖子（支持多图）。
 
 ### 请求体
+```json
 {
 	"scene": "travel",
 	"title": "五一成都三日游",
@@ -23,8 +24,10 @@
 		"https://example.com/post/2.jpg"
 	]
 }
+```
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "发布成功",
@@ -53,6 +56,7 @@
 		"updatedAt": "2026-05-09T10:00:00"
 	}
 }
+```
 
 ## get /api/v1/post
 ### 功能
@@ -64,6 +68,7 @@
 - interest（可选）: 按兴趣要求关键词筛选。
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "查询成功",
@@ -87,12 +92,14 @@
 		}
 	]
 }
+```
 
 ## get /api/v1/post/{postId}
 ### 功能
 获取帖子详情。
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "查询成功",
@@ -121,12 +128,14 @@
 		"updatedAt": "2026-05-09T10:00:00"
 	}
 }
+```
 
 ## put /api/v1/post/{postId}
 ### 功能
 修改帖子内容。
 
 ### 请求体
+```json
 {
 	"scene": "travel",
 	"title": "五一成都三日游（更新）",
@@ -143,8 +152,10 @@
 		"https://example.com/post/2.jpg"
 	]
 }
+```
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "更新成功",
@@ -173,28 +184,34 @@
 		"updatedAt": "2026-05-09T10:30:00"
 	}
 }
+```
 
 ## delete /api/v1/post/{postId}
 ### 功能
 删除帖子（软删除）。
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "删除成功",
 	"data": null
 }
+```
 
 ## post /api/v1/post/{postId}/pin
 ### 功能
 置顶帖子。
 
 ### 请求体
+```json
 {
 	"isPinned": 1
 }
+```
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "置顶成功",
@@ -204,15 +221,19 @@
 		"updatedAt": "2026-05-09T10:40:00"
 	}
 }
+```
 
 ## post /api/v1/post/{postId}/finish
 ### 功能
 作者主动结束帖子（更新状态为已结束）。
 ### 请求体
+```json
 {
 	"status": 2
 }
+```
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "已结束",
@@ -222,6 +243,7 @@
 		"updatedAt": "2026-05-09T10:50:00"
 	}
 }
+```
 
 
 # 结伴申请（Post Application）
@@ -231,11 +253,14 @@
 申请加入结伴。
 
 ### 请求体
+```json
 {
 	"message": "我也想加入，可一起规划路线"
 }
+```
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "申请已提交",
@@ -251,12 +276,14 @@
 		"updatedAt": "2026-05-09T10:10:00"
 	}
 }
+```
 
 ## get /api/v1/post/{postId}/applications
 ### 功能
 群主查看该帖子的申请列表。
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "查询成功",
@@ -274,18 +301,47 @@
 		}
 	]
 }
+```
+
+## get /api/v1/applications/me
+### 功能
+获取当前用户的所有申请列表。
+
+### 响应体
+```json
+{
+	"code": 200,
+	"message": "查询成功",
+	"data": [
+		{
+			"id": 5001,
+			"postId": 1001,
+			"applicantId": 1778234511681,
+			"message": "我也想加入，可一起规划路线",
+			"status": 0,
+			"reviewedBy": null,
+			"reviewedAt": null,
+			"createdAt": "2026-05-09T10:10:00",
+			"updatedAt": "2026-05-09T10:10:00"
+		}
+	]
+}
+```
 
 ## post /api/v1/post/{postId}/applications/{applicationId}/review
 ### 功能
 群主审核申请（通过/拒绝）。
 
 ### 请求体
+```json
 {
 	"status": 1,
 	"rejectReason": null
 }
+```
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "审核成功",
@@ -300,12 +356,14 @@
 		"updatedAt": "2026-05-09T10:20:00"
 	}
 }
+```
 
 ## post /api/v1/post/{postId}/applications/{applicationId}/cancel
 ### 功能
 申请人取消申请（仅限待审核）。
 
 ### 响应体
+```json
 {
 	"code": 200,
 	"message": "已取消申请",
@@ -317,6 +375,7 @@
 		"updatedAt": "2026-05-09T10:25:00"
 	}
 }
+```
 
 # 多图上传（COS）
 
