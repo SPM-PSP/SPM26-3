@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/post")
+@RequestMapping("/api/v1")
 public class PalApplicationController {
 
     @Autowired
     private IPalApplicationService applicationService;
 
-    @PostMapping("/{postId}/apply")
+    @PostMapping("/post/{postId}/apply")
     public ApiResponse<PalPostApplicationResponse> apply(@PathVariable Long postId,
                                                          @RequestBody PalPostApplicationCreateRequest payload,
                                                          HttpServletRequest request) {
@@ -30,7 +30,7 @@ public class PalApplicationController {
         }
     }
 
-    @GetMapping("/{postId}/applications")
+    @GetMapping("/post/{postId}/applications")
     public ApiResponse<List<PalPostApplicationResponse>> listApplications(@PathVariable Long postId,
                                                                           HttpServletRequest request) {
         try {
@@ -42,7 +42,18 @@ public class PalApplicationController {
         }
     }
 
-    @PostMapping("/{postId}/applications/{applicationId}/review")
+    @GetMapping("/applications/me")
+    public ApiResponse<List<PalPostApplicationResponse>> listMyApplications(HttpServletRequest request) {
+        try {
+            Long userId = (Long) request.getAttribute("userId");
+            List<PalPostApplicationResponse> response = applicationService.listMyApplications(userId);
+            return ApiResponse.success("查询成功", response);
+        } catch (Exception e) {
+            return ApiResponse.error(500, "查询失败: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/post/{postId}/applications/{applicationId}/review")
     public ApiResponse<PalPostApplicationResponse> review(@PathVariable Long postId,
                                                           @PathVariable Long applicationId,
                                                           @RequestBody PalPostApplicationReviewRequest payload,
@@ -56,7 +67,7 @@ public class PalApplicationController {
         }
     }
 
-    @PostMapping("/{postId}/applications/{applicationId}/cancel")
+    @PostMapping("/post/{postId}/applications/{applicationId}/cancel")
     public ApiResponse<PalPostApplicationResponse> cancel(@PathVariable Long postId,
                                                           @PathVariable Long applicationId,
                                                           HttpServletRequest request) {
