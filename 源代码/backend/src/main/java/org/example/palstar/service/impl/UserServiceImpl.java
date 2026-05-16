@@ -33,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
@@ -192,6 +194,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             user.setDeleteApplyAt(null);
             updateById(user);
         }
+    }
+
+    @Override
+    public List<UserPublicProfileResponse> searchUsers(String keyword) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNull("deleted_at").and(wrapper -> wrapper.like("nickname", keyword).or().like("id", keyword));
+        List<User> users = list(queryWrapper);
+        return users.stream().map(user -> {
+            UserPublicProfileResponse response = new UserPublicProfileResponse();
+            response.setId(user.getId());
+            response.setNickname(user.getNickname());
+            response.setAvatarUrl(user.getAvatarUrl());
+            return response;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserPublicProfileResponse> getFollowers(Long userId) {
+        return baseMapper.findFollowers(userId);
+    }
+
+    @Override
+    public List<UserPublicProfileResponse> getFollowing(Long userId) {
+        return baseMapper.findFollowing(userId);
     }
 
     @Override

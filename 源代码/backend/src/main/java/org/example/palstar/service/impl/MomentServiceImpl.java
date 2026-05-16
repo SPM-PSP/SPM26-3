@@ -17,6 +17,8 @@ import org.example.palstar.dto.MomentMediaRequest;
 import org.example.palstar.dto.MomentMediaResponse;
 import org.example.palstar.dto.MomentResponse;
 import org.example.palstar.dto.MomentUpdateRequest;
+import org.example.palstar.dto.MyCommentResponse;
+import org.example.palstar.dto.MyLikedMomentResponse;
 import org.example.palstar.entity.Moment;
 import org.example.palstar.entity.MomentComment;
 import org.example.palstar.entity.MomentFavorite;
@@ -317,6 +319,30 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
 
         redisTemplate.opsForValue().decrement(commentCountKey(comment.getMomentId()));
         touchCountKey(commentCountKey(comment.getMomentId()));
+    }
+
+    @Override
+    public List<MyLikedMomentResponse> getMyLikedMoments(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        return baseMapper.findLikedMomentsByUserId(userId);
+    }
+
+    @Override
+    public List<MyLikedMomentResponse> getMyFavoritedMoments(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        return baseMapper.findFavoritedMomentsByUserId(userId);
+    }
+
+    @Override
+    public List<MyCommentResponse> getMyComments(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        return baseMapper.findCommentsByUserId(userId);
     }
 
     private List<MomentMedia> getMedia(Long momentId) {
