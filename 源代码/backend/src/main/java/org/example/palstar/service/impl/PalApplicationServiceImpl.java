@@ -10,6 +10,9 @@ import org.example.palstar.dto.PalPostApplicationResponse;
 import org.example.palstar.dto.PalPostApplicationReviewRequest;
 import org.example.palstar.entity.PalApplication;
 import org.example.palstar.entity.PalPost;
+import org.example.palstar.entity.GroupChat;
+import org.example.palstar.entity.GroupMember;
+import org.example.palstar.mapper.GroupMemberMapper;
 import org.example.palstar.mapper.PalApplicationMapper;
 import org.example.palstar.mapper.PalPostMapper;
 import org.example.palstar.service.IPalApplicationService;
@@ -22,6 +25,12 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
 
     @Autowired
     private PalPostMapper postMapper;
+
+    @Autowired
+    private org.example.palstar.service.IGroupChatService groupChatService;
+
+    @Autowired
+    private GroupMemberMapper groupMemberMapper;
 
     @Override
     @Transactional
@@ -93,7 +102,22 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
         if (post == null || post.getDeletedAt() != null) {
             throw new RuntimeException("Post not found");
         }
-        if (!post.getAuthorId().equals(userId)) {
+
+        // 查询该帖子对应群聊里当前用户的角色
+        GroupChat group = groupChatService.getGroupByPostId(post.getId());
+        boolean isOwner = post.getAuthorId().equals(userId);
+        boolean isAdmin = false;
+        if (group != null) {
+            GroupMember member = groupMemberMapper.selectOne(
+                    new QueryWrapper<GroupMember>()
+                            .eq("group_id", group.getId())
+                            .eq("user_id", userId)
+                            .isNull("left_at")
+                            .last("LIMIT 1")
+            );
+            isAdmin = member != null && (member.getRole() == 1 || member.getRole() == 2);
+        }
+        if (!isOwner && !isAdmin) {
             throw new RuntimeException("No permission to review applications");
         }
 
@@ -104,11 +128,11 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
         if (application == null) {
             throw new RuntimeException("Application not found");
         }
-        if (request.getStatus() == null || (request.getStatus() != 1 && request.getStatus() != 2)) {
+        if (request.getStatus() == null || (request.getStatus()!= 1 && request.getStatus()!= 2)) {
             throw new RuntimeException("Invalid review status");
         }
 
-        if (application.getStatus() != null && application.getStatus() != 0) {
+        if (application.getStatus() != null && application.getStatus()!= 0) {
             throw new RuntimeException("Application already reviewed");
         }
 
@@ -119,7 +143,7 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
         application.setUpdatedAt(LocalDateTime.now());
         updateById(application);
 
-        if (request.getStatus() == 1) {
+        if (request.getStatus()== 1) {
             int nextCount = post.getCurrentCount() != null ? post.getCurrentCount() + 1 : 1;
             post.setCurrentCount(nextCount);
             if (post.getExpectedCount() != null && nextCount >= post.getExpectedCount()) {
@@ -127,6 +151,12 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
             }
             post.setUpdatedAt(LocalDateTime.now());
             postMapper.updateById(post);
+
+            // 审批通过后将申请人加入已有群聊
+            groupChatService.addMemberToGroup(
+                    post.getId(),
+                    application.getApplicantId()
+            );
         }
 
         return toResponse(application);
@@ -152,18 +182,7 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
         return toResponse(application);
     }
 
-    @Override
-    public List<PalPostApplicationResponse> listMyApplications(Long userId) {
-        List<PalApplication> applications = list(new QueryWrapper<PalApplication>()
-                .eq("applicant_id", userId)
-                .orderByDesc("created_at"));
-        return applications.stream().map(this::toResponse).collect(Collectors.toList());
-    }
-
     private PalPostApplicationResponse toResponse(PalApplication application) {
-        if (application == null) {
-            throw new RuntimeException("Application not found");
-        }
         PalPostApplicationResponse response = new PalPostApplicationResponse();
         response.setId(application.getId());
         response.setPostId(application.getPostId());

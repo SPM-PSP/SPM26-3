@@ -9,9 +9,13 @@ import java.util.List;
 import org.example.palstar.dto.GroupChatResponse;
 import org.example.palstar.dto.GroupMessageResponse;
 import org.example.palstar.dto.GroupMessageSendRequest;
+import org.example.palstar.dto.GroupMemberResponse;
+import org.example.palstar.dto.GroupMemberCountResponse;
 import org.example.palstar.entity.GroupChat;
 import org.example.palstar.entity.GroupMember;
 import org.example.palstar.entity.GroupMessage;
+import org.example.palstar.entity.User;
+import org.example.palstar.mapper.UserMapper;
 import org.example.palstar.mapper.GroupChatMapper;
 import org.example.palstar.mapper.GroupMemberMapper;
 import org.example.palstar.mapper.GroupMessageMapper;
@@ -33,12 +37,24 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
     @Autowired
     private GroupMessageMapper groupMessageMapper;
 
-    // ——— I-G-001 创建群聊 ———
+    @Autowired
+    private UserMapper userMapper;
+
+    // ——— I-G-001 发帖时创建群聊，只加群主 ———
     @Override
     @Transactional
-    public Long createGroup(Long postId, Long ownerId, Long applicantId, String groupName) {
+    public Long createGroup(Long postId, Long ownerId, String groupName) {
 
-        // 1. 创建群聊记录，status=0 正常
+        // 检查该帖子是否已有群聊，避免重复创建
+        long exists = groupChatMapper.selectCount(
+                new LambdaQueryWrapper<GroupChat>()
+                        .eq(GroupChat::getPostId, postId)
+        );
+        if (exists > 0) {
+            throw new RuntimeException("该帖子已存在群聊");
+        }
+
+        // 1. 创建群聊记录
         GroupChat group = new GroupChat();
         group.setPostId(postId);
         group.setOwnerId(ownerId);
@@ -49,13 +65,135 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
 
         Long groupId = group.getId();
 
-        // 2. 将群主加入（role=2群主，joinSource=2直接创建）
+        // 2. 只将群主加入（role=2群主，joinSource=2直接创建）
         addMember(groupId, ownerId, 2, 2);
 
-        // 3. 将申请人加入（role=0普通成员，joinSource=0申请通过）
-        addMember(groupId, applicantId, 0, 0);
-
         return groupId;
+    }
+
+    // ——— 审批通过时将申请人加入已有群聊 ———
+    @Override
+    @Transactional
+    public void addMemberToGroup(Long postId, Long applicantId) {
+
+        // 根据 postId 找到已有群聊
+        GroupChat group = groupChatMapper.selectOne(
+                new LambdaQueryWrapper<GroupChat>()
+                        .eq(GroupChat::getPostId, postId)
+                        .eq(GroupChat::getStatus, 0)
+        );
+        if (group == null) {
+            throw new RuntimeException("群聊不存在或已解散");
+        }
+
+        // 检查是否已经是成员
+        long alreadyMember = groupMemberMapper.selectCount(
+                new LambdaQueryWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, group.getId())
+                        .eq(GroupMember::getUserId, applicantId)
+                        .isNull(GroupMember::getLeftAt)
+        );
+        if (alreadyMember > 0) {
+            throw new RuntimeException("该用户已是群成员");
+        }
+
+        // 将申请人加入群（role=0普通成员，joinSource=0申请通过）
+        addMember(group.getId(), applicantId, 0, 0);
+    }
+
+    //修改群名
+    @Override
+    public void updateGroupName(Long groupId, Long userId, String groupName) {
+
+        GroupChat group = groupChatMapper.selectById(groupId);
+        if (group == null || group.getStatus() == 1) {
+            throw new RuntimeException("群聊不存在或已解散");
+        }
+        // 只有群主可以修改群名
+        if (!group.getOwnerId().equals(userId)) {
+            throw new RuntimeException("只有群主可以修改群名");
+        }
+
+        // 直接修改对象字段再更新
+        group.setName(groupName);
+        groupChatMapper.updateById(group);
+    }
+
+    //群主或管理员邀请群成员
+    @Override
+    @Transactional
+    public void inviteMember(Long groupId, Long operatorId, Long invitedUserId) {
+
+        GroupChat group = groupChatMapper.selectById(groupId);
+        if (group == null || group.getStatus() == 1) {
+            throw new RuntimeException("群聊不存在或已解散");
+        }
+
+        // 校验操作者是群主或管理员
+        GroupMember operatorMember = groupMemberMapper.selectOne(
+                new LambdaQueryWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, groupId)
+                        .eq(GroupMember::getUserId, operatorId)
+                        .isNull(GroupMember::getLeftAt)
+        );
+        if (operatorMember == null || operatorMember.getRole() == 0) {
+            throw new RuntimeException("只有群主或管理员可以邀请成员");
+        }
+
+        // 检查被邀请者是否已是成员
+        long alreadyMember = groupMemberMapper.selectCount(
+                new LambdaQueryWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, groupId)
+                        .eq(GroupMember::getUserId, invitedUserId)
+                        .isNull(GroupMember::getLeftAt)
+        );
+        if (alreadyMember > 0) {
+            throw new RuntimeException("该用户已是群成员");
+        }
+
+        // 加入群（role=0普通成员，joinSource=1被邀请）
+        addMember(groupId, invitedUserId, 0, 1);
+    }
+
+    //群主设置管理员
+    @Override
+    @Transactional
+    public void setAdmin(Long groupId, Long ownerId, Long targetUserId) {
+
+        GroupChat group = groupChatMapper.selectById(groupId);
+        if (group == null || group.getStatus() == 1) {
+            throw new RuntimeException("群聊不存在或已解散");
+        }
+
+        // 只有群主可以设置管理员
+        if (!group.getOwnerId().equals(ownerId)) {
+            throw new RuntimeException("只有群主可以设置管理员");
+        }
+
+        // 查询目标用户是否在群里
+        GroupMember targetMember = groupMemberMapper.selectOne(
+                new LambdaQueryWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, groupId)
+                        .eq(GroupMember::getUserId, targetUserId)
+                        .isNull(GroupMember::getLeftAt)
+        );
+        if (targetMember == null) {
+            throw new RuntimeException("该用户不是群成员");
+        }
+        if (targetMember.getRole() == 2) {
+            throw new RuntimeException("不能修改群主的角色");
+        }
+        if (targetMember.getRole() == 1) {
+            throw new RuntimeException("该用户已经是管理员");
+        }
+
+        // 设置为管理员 role=1
+        groupMemberMapper.update(null,
+                new LambdaUpdateWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, groupId)
+                        .eq(GroupMember::getUserId, targetUserId)
+                        .set(GroupMember::getRole, 1)
+        );
     }
 
     // ——— I-G-002 发送群消息 ———
@@ -135,6 +273,58 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
         return result;
     }
 
+    // ——— 查询群成员列表 ———
+    @Override
+    public List<GroupMemberResponse> listGroupMembers(Long groupId) {
+
+        // 判断群是否存在
+        GroupChat group = groupChatMapper.selectById(groupId);
+        if (group == null || group.getStatus() == 1) {
+            throw new RuntimeException("群聊不存在或已解散");
+        }
+
+        List<GroupMember> members = groupMemberMapper.selectList(
+                new LambdaQueryWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, groupId)
+                        .isNull(GroupMember::getLeftAt)
+        );
+
+        List<GroupMemberResponse> result = new ArrayList<>();
+        for (GroupMember m : members) {
+            User user = userMapper.selectById(m.getUserId());
+            GroupMemberResponse resp = new GroupMemberResponse();
+            resp.setUserId(m.getUserId());
+            resp.setNickname(user != null ? user.getNickname() : null);
+            resp.setAvatarUrl(user != null ? user.getAvatarUrl() : null);
+            resp.setRole(m.getRole());
+            resp.setJoinSource(m.getJoinSource());
+            resp.setJoinedAt(m.getJoinedAt());
+            result.add(resp);
+        }
+        return result;
+    }
+
+    // ——— 查询群成员数 ———
+    @Override
+    public GroupMemberCountResponse getGroupMemberCount(Long groupId) {
+
+        GroupChat group = groupChatMapper.selectById(groupId);
+        if (group == null || group.getStatus() == 1) {
+            throw new RuntimeException("群聊不存在或已解散");
+        }
+
+        long count = groupMemberMapper.selectCount(
+                new LambdaQueryWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, groupId)
+                        .isNull(GroupMember::getLeftAt)
+        );
+
+        GroupMemberCountResponse resp = new GroupMemberCountResponse();
+        resp.setGroupId(groupId);
+        resp.setMemberCount((int) count);
+        return resp;
+    }
+
     // ——— I-G-004 退群 / 解散 ———
     @Override
     @Transactional
@@ -167,7 +357,24 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
 
     // ——— 历史消息（分页） ———
     @Override
-    public List<GroupMessageResponse> listMessages(Long groupId, int page, int size) {
+    public List<GroupMessageResponse> listMessages(Long groupId, Long userId, int page, int size) {
+
+        // 校验群是否存在
+        GroupChat group = groupChatMapper.selectById(groupId);
+        if (group == null || group.getStatus() == 1) {
+            throw new RuntimeException("群聊不存在或已解散");
+        }
+
+        // 校验当前用户是否是群成员且未退出
+        long isMember = groupMemberMapper.selectCount(
+                new LambdaQueryWrapper<GroupMember>()
+                        .eq(GroupMember::getGroupId, groupId)
+                        .eq(GroupMember::getUserId, userId)
+                        .isNull(GroupMember::getLeftAt)
+        );
+        if (isMember == 0) {
+            throw new RuntimeException("你不是该群成员，无法查看消息");
+        }
 
         int offset = (page - 1) * size;
         List<GroupMessage> messages = groupMessageMapper.selectList(
@@ -208,4 +415,14 @@ public class GroupChatServiceImpl extends ServiceImpl<GroupChatMapper, GroupChat
         resp.setCreatedAt(m.getCreatedAt());
         return resp;
     }
+
+    @Override
+    public GroupChat getGroupByPostId(Long postId) {
+        return groupChatMapper.selectOne(
+                new LambdaQueryWrapper<GroupChat>()
+                        .eq(GroupChat::getPostId, postId)
+                        .eq(GroupChat::getStatus, 0)
+        );
+    }
 }
+

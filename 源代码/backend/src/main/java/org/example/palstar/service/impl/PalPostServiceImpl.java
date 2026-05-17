@@ -25,6 +25,9 @@ public class PalPostServiceImpl extends ServiceImpl<PalPostMapper, PalPost> impl
     @Autowired
     private PalPostImageMapper postImageMapper;
 
+    @Autowired
+    private org.example.palstar.service.IGroupChatService groupChatService;
+
     @Override
     @Transactional
     public PalPostResponse createPost(Long userId, PalPostCreateRequest request) {
@@ -48,8 +51,15 @@ public class PalPostServiceImpl extends ServiceImpl<PalPostMapper, PalPost> impl
         post.setUpdatedAt(LocalDateTime.now());
         save(post);
 
-        saveImages(post.getId(), request.getImageUrls());
+        // 发帖成功后自动创建群聊，只加群主
+        String groupName = "【结伴】" + post.getTitle();
+        groupChatService.createGroup(
+                post.getId(),
+                post.getAuthorId(),
+                groupName
+        );
 
+        saveImages(post.getId(), request.getImageUrls());
         return toResponse(post, getImages(post.getId()));
     }
 
