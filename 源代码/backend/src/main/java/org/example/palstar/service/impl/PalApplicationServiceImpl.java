@@ -182,6 +182,14 @@ public class PalApplicationServiceImpl extends ServiceImpl<PalApplicationMapper,
         return toResponse(application);
     }
 
+    @Override
+    public List<PalPostApplicationResponse> listMyApplications(Long userId) {
+        List<PalApplication> applications = list(new QueryWrapper<PalApplication>()
+                .eq("applicant_id", userId)
+                .orderByDesc("created_at"));
+        return applications.stream().map(this::toResponse).collect(Collectors.toList());
+    }
+
     private PalPostApplicationResponse toResponse(PalApplication application) {
         PalPostApplicationResponse response = new PalPostApplicationResponse();
         response.setId(application.getId());
