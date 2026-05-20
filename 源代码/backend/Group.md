@@ -10,16 +10,19 @@
 - groupId：群聊 ID
 
 ### 请求体
+```json
 {
     "msgType": 0,
     "content": "大家好！",
     "mediaUrl": null
 }
+```
 
 ### 说明
 msgType 0：文字，1：图片，2：语音，3：视频。
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "发送成功",
@@ -33,6 +36,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
         "createdAt": "2026-05-13T10:00:00"
     }
 }
+```
 
 ## get /api/v1/users/me/groups
 ### 功能
@@ -42,6 +46,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 查询时过滤掉 `status = 1` 的已解散群聊，以及 `left_at` 不为空的已退出记录。
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "查询成功",
@@ -56,6 +61,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
         }
     ]
 }
+```
 
 ## delete /api/v1/groups/{groupId}/members/me
 ### 功能
@@ -69,11 +75,13 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 - 普通成员调用：group_member 表 left_at 记录退出时间。
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "操作成功",
     "data": null
 }
+```
 
 ## get /api/v1/groups/{groupId}/messages
 ### 功能
@@ -87,6 +95,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 - size（可选，默认 20）：每页数量
 
 ### 响应体
+```json
 {
 "code": 200,
 "message": "查询成功",
@@ -102,6 +111,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
         }
     ]
 }
+```
 
 ## put /api/v1/groups/{groupId}/name
 ### 功能
@@ -111,16 +121,20 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 - groupId：群聊 ID
 
 ### 请求体
+```json
 {
     "groupName": "新的群名"
 }
+```
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "Group name updated",
     "data": null
 }
+```
 
 ## get /api/v1/groups/{groupId}/members
 ### 功能
@@ -135,6 +149,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 - 过滤掉 `left_at` 不为空的已退出成员。
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "Success",
@@ -157,6 +172,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
         }
     ]
 }
+```
 
 ## get /api/v1/groups/{groupId}/member-count
 ### 功能
@@ -166,6 +182,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 - groupId：群聊 ID
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "Success",
@@ -174,6 +191,7 @@ msgType 0：文字，1：图片，2：语音，3：视频。
     "memberCount": 2
     }
 }
+```
 
 ## post /api/v1/groups/{groupId}/members
 ### 功能
@@ -183,19 +201,23 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 - groupId：群聊 ID
 
 ### 请求体
+```json
 {
     "invitedUserId": 3
 }
+```
 
 ### 说明
 邀请加入的成员 joinSource 记录为 1（被邀请）。
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "邀请成功",
     "data": null
 }
+```
 
 ## put /api/v1/groups/{groupId}/members/{targetUserId}/role
 ### 功能
@@ -210,8 +232,10 @@ msgType 0：文字，1：图片，2：语音，3：视频。
 - role 设置为 1（管理员）。
 
 ### 响应体
+```json
 {
     "code": 200,
     "message": "设置管理员成功",
     "data": null
 }
+```
