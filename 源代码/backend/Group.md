@@ -1,6 +1,6 @@
 # 群聊（Group Chat）
 
-> 说明：以下为群聊模块接口文档草案，字段按 `group_chat`、`group_member`、`group_message` 表设计。群聊由系统在结伴帖发布后自动创建（I-G-001），无需前端主动调用创建接口。审批通过后系统自动将申请人加入已有群聊。
+> 说明：以下为群聊模块接口文档草案，字段按 `group_chat`、`group_member`、`group_message` 表设计。群聊由系统在结伴帖发布后自动创建，无需前端主动调用创建接口。审批通过后系统自动将申请人加入已有群聊。
 
 ## post /api/v1/groups/{groupId}/messages
 ### 功能
