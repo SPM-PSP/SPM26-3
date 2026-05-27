@@ -1,0 +1,71 @@
+<view class="login-page">
+  <!-- 顶部紫橙渐变头部 -->
+  <view class="header-section">
+    <view class="logo-wrap">
+      <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    </view>
+    <view class="app-name">搭子星球</view>
+    <view class="app-en-name">PalStar</view>
+  </view>
+
+  <!-- 中间介绍文字 -->
+  <view class="intro-section">
+    <view class="title">找到你的搭子</view>
+    <view class="desc">
+      旅行、学习、干饭、运动…
+      总有一个人在等你 ✨
+    </view>
+  </view>
+
+  <!-- 搭子标签 -->
+  <view class="tags-section">
+    <view class="tag-item">✈️ 旅行搭子</view>
+    <view class="tag-item">📚 学习搭子</view>
+    <view class="tag-item">🍚 干饭搭子</view>
+    <view class="tag-item">⚽ 运动搭子</view>
+    <view class="tag-item">🎮 游戏搭子</view>
+    <view class="tag-item">🎬 观影搭子</view>
+  </view>
+
+  <!-- 登录按钮和协议 -->
+  <view class="action-section">
+    <view class="login-btn-wrap">
+  <button 
+    class="login-btn {{isAgree && !logining ? '' : 'disabled'}}" 
+    disabled="{{!isAgree || logining}}"
+    open-type="getUserInfo" 
+    bindgetuserinfo="getUserProfile"
+  >
+    <view class="btn-content">
+      <image src="/images/wechat.png" class="wechat-icon" />
+      <text class="btn-text">{{logining ? '登录中...' : '微信一键登录'}}</text>
+    </view>
+  </button>
+</view>
+  <!-- 勾选框 -->
+  <view class="agree-row" bindtap="toggleAgree">
+        <view class="checkbox {{isAgree ? 'checked' : ''}}"></view>
+        <text class="agree-txt">我已阅读并同意</text>
+        <text class="link">《用户协议》</text>
+        <text class="agree-txt">和</text>
+        <text class="link">《隐私政策》</text>
+      </view>
+  </view>
+
+  <!-- 底部数据统计 -->
+  <view class="stats-section">
+    <view class="stat-item">
+      <view class="num">10W+</view>
+      <view class="text">在校大学生</view>
+    </view>
+    <view class="stat-item">
+      <view class="num">50+</view>
+      <view class="text">结伴场景</view>
+    </view>
+    <view class="stat-item">
+      <view class="num">98%</view>
+      <view class="text">匹配满意度</view>
+    </view>
+  </view>
+
+ </view>

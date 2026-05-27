@@ -1,0 +1,127 @@
+<view class="page-container" >
+  <view class="header-bar">
+    <text class="page-title">动态广场</text>
+    <view class="publish-btn" bindtap="goPublishDynamic">发动态</view>
+  </view>
+
+  <view class="search-box">
+    <image
+      class="search-icon-img"
+      src="/assets/icons/3.1-搜索.svg"
+      mode="aspectFit"
+    />
+
+    <input
+      class="search-input"
+      placeholder="搜索攻略、经验..."
+      value="{{searchKeyword}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearchConfirm"
+    />
+  </view>
+
+  <scroll-view class="category-tabs" scroll-x="true" show-scrollbar="false">
+    <view
+      class="tab-item {{activeTag === item.name ? 'active' : ''}}"
+      wx:for="{{tagConfig}}"
+      wx:key="name"
+      data-name="{{item.name}}"
+      bindtap="switchTag"
+    >
+      {{item.name}}
+    </view>
+  </scroll-view>
+
+  <view class="dynamic-list" wx:if="{{dynamicList.length > 0}}">
+    <view
+      class="dynamic-card"
+      wx:for="{{dynamicList}}"
+      wx:key="id"
+      bindtap="goDetail"
+      data-id="{{item.id}}"
+    >
+
+      <view class="card-banner" wx:if="{{item.coverImage}}">
+  <image class="banner-img" src="{{item.coverImage}}" mode="aspectFill" />
+</view>
+
+
+      <text class="card-title">{{item.title}}</text>
+
+      <view class="card-content-wrap">
+  <view class="card-content">{{item.content}}</view>
+</view>
+
+
+<view
+  class="author-info"
+  catchtap="goOtherProfile"
+  data-user-id="{{item.authorId}}"
+>
+  <image
+    wx:if="{{item.author.avatarUrl}}"
+    class="author-avatar"
+    src="{{item.author.avatarUrl}}"
+    mode="aspectFill"
+  />
+  <view wx:else class="author-avatar">{{item.author.initial}}</view>
+
+  <text class="author-name">{{item.author.nickname}}</text>
+  <text class="publish-time">· {{item.publishTime}}</text>
+</view>
+
+
+      <view class="divider"></view>
+
+      <view class="stats-bar">
+        <view
+          class="stat-item like-item"
+          catchtap="toggleLike"
+          data-id="{{item.id}}"
+          data-index="{{index}}"
+        >
+          <image
+            class="like-icon"
+            src="{{item.isLiked ? '/assets/icons/喜爱2.svg' : '/assets/icons/喜爱1.svg'}}"
+            mode="aspectFit"
+          />
+
+          <text class="stat-text">{{item.likeCount}}
+          </text>
+        </view>
+
+        <view class="stat-item">
+          <image
+            class="action-icon"
+            src="/assets/icons/评论.svg"
+            mode="aspectFit"
+          />
+
+          <text class="stat-text">{{item.commentCount}}
+          </text>
+        </view>
+
+        <view
+          class="stat-item"
+          catchtap="toggleFavorite"
+          data-id="{{item.id}}"
+          data-index="{{index}}"
+        >
+          <image
+            class="action-icon"
+            src="{{item.isFavorited ? '/assets/icons/收藏 -已收藏.svg' : '/assets/icons/收藏.svg'}}"
+            mode="aspectFit"
+          />
+
+          <text class="stat-text">{{item.favoriteCount}}
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-tip" wx:else>
+    <text class="empty-icon">暂无</text>
+    <text class="empty-text">暂无相关动态</text>
+  </view>
+</view>

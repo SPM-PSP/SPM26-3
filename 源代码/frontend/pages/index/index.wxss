@@ -1,0 +1,76 @@
+/* ...保留之前的全局背景... */
+
+/* 1. 功能板块 (背景图预留) */
+.feature-row {
+  display: flex;
+  gap: 20rpx;
+  margin-top: -50rpx;
+}
+.feature-box {
+  flex: 1;
+  height: 220rpx;
+  border-radius: 30rpx;
+  padding: 30rpx;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10rpx 20rpx rgba(0,0,0,0.05);
+  background-size: cover; /* 如果要用背景图 */
+  background-position: center;
+}
+.post-box { 
+  background: linear-gradient(135deg, #fcece8, #f8d8d1); 
+  /* background-image: url('你的图片地址'); */
+}
+.guide-box { 
+  background: linear-gradient(135deg, #eef0ff, #d7dbff);
+}
+.box-title { font-weight: bold; font-size: 32rpx; display: block; }
+.box-desc { font-size: 22rpx; color: #888; margin-top: 10rpx; display: block; }
+.rocket, .book { position: absolute; right: 20rpx; bottom: 20rpx; font-size: 60rpx; opacity: 0.8; }
+
+/* 2. 场景筛选 (圆形) */
+.category-grid {
+  display: flex;
+  justify-content: space-around;
+  padding: 40rpx 0;
+}
+.cat-circle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s;
+}
+.cat-icon {
+  width: 100rpx; height: 100rpx;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+  border: 4rpx solid transparent;
+}
+.cat-circle-item.active .cat-icon {
+  border-color: #7c66f5;
+  background: #f0edff;
+}
+.cat-name { font-size: 24rpx; margin-top: 15rpx; color: #555; }
+
+/* 3. 标签 Pill Style (关键点) */
+.tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15rpx;
+  margin-top: 20rpx;
+}
+.pill-tag {
+  background: #f4f2ff; /* 浅紫色背景 */
+  color: #7c66f5;      /* 深紫色文字 */
+  padding: 8rpx 24rpx;
+  border-radius: 40rpx; /* 圆角药丸状 */
+  font-size: 22rpx;
+  border: 1rpx solid #e8e4ff;
+}
+
+/* ...卡片布局沿用之前的 Flex 配置... */

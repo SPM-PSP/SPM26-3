@@ -1,0 +1,63 @@
+<view class="page-container">
+
+  <!-- 2. 搜索会话 -->
+  <view class="search-wrap">
+    <view class="search-inner">
+      <icon type="search" size="14" color="#bbb"></icon>
+      <input placeholder="搜索群聊名称..." bindinput="onSearchInput" confirm-type="search" />
+    </view>
+  </view>
+
+  <!-- 3. 功能通知入口 -->
+  <view class="system-section" bindtap="apiGoToNotification">
+    <view class="sys-icon-wrap">
+      <view class="sys-icon">📩</view>
+      <view class="badge" wx:if="{{systemNotice.unreadCount > 0}}">{{systemNotice.unreadCount}}</view>
+    </view>
+    <view class="sys-content">
+      <view class="sys-top">
+        <text class="sys-name">入伙申请 / 通知</text>
+        <text class="sys-time">{{systemNotice.time}}</text>
+      </view>
+      <view class="sys-desc">{{systemNotice.lastMsg}}</view>
+    </view>
+    <view class="sys-arrow">></view>
+  </view>
+
+  <!-- 4. 会话列表 -->
+  <view class="chat-list-container">
+    <view class="list-title">我的群组</view>
+    
+    <view class="loading-state" wx:if="{{isLoading && chatList.length == 0}}">同步星球信号中...</view>
+
+    <block wx:for="{{chatList}}" wx:key="id">
+      <view class="chat-item" bindtap="apiGoToChat" data-id="{{item.id}}" data-name="{{item.name}}">
+        <!-- 头像区 -->
+        <view class="avatar-wrap">
+          <view class="avatar-main" style="background: {{item.avatarBg}}">{{item.avatar}}</view>
+          <view class="unread-dot" wx:if="{{item.unread > 0}}">{{item.unread}}</view>
+        </view>
+
+        <!-- 文字区 -->
+        <view class="chat-info">
+          <view class="info-top">
+            <view class="name-row">
+              <text class="chat-name">{{item.name}}</text>
+              <text class="group-tag">群</text>
+            </view>
+            <text class="chat-time">{{item.time}}</text>
+          </view>
+          <view class="info-bottom">
+            <text class="last-msg">{{item.lastMsg}}</text>
+            <text class="scene-tag" wx:if="{{item.tag}}">{{item.tag}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view class="empty-hint" wx:if="{{chatList.length == 0 && !isLoading}}">
+      <view>还没有加入任何搭子群聊哦</view>
+    </view>
+  </view>
+</view>

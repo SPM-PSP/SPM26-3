@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "搭子星球",
+  "navigationBarTextStyle": "black",
+  "navigationStyle": "custom",
+  "backgroundColor": "#F8F9FF",
+  "enablePullDownRefresh": true
+}

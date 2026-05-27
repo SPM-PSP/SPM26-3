@@ -1,0 +1,51 @@
+<!-- pages/my-moments-list/my-moments-list.wxml -->
+<view class="my-moments-page">
+  <!-- 导航栏 -->
+  <view class="nav-header">
+    <view class="back-btn" bindtap="goBack">
+      <text>←</text>
+    </view>
+    <view class="title">{{title}}</view>
+  </view>
+
+  <!-- 列表 -->
+  <view class="list-container" wx:if="{{!loading && list.length > 0}}">
+    <!-- 点赞/收藏列表 -->
+    <block wx:if="{{type === 'likes' || type === 'favorites'}}">
+      <view class="moment-card" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="goToMomentDetail">
+        <view class="card-header">
+          <view class="author-info" data-id="{{item.author.id}}" catchtap="goToProfile">
+            <image class="avatar" src="{{item.author.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+            <text class="author-name">{{item.author.nickname || '用户' + item.author.id}}</text>
+          </view>
+        </view>
+        <view class="moment-title">{{item.title}}</view>
+        <view class="moment-stats">
+          <text>❤️ {{item.likeCount || 0}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 评论列表 -->
+    <block wx:if="{{type === 'comments'}}">
+      <view class="comment-card" wx:for="{{list}}" wx:key="id">
+        <view class="comment-content">{{item.content}}</view>
+        <view class="comment-footer">
+          <text class="moment-title" data-id="{{item.moment.id}}" catchtap="goToMomentDetail">来自：{{item.moment.title}}</text>
+          <text class="comment-time">{{item.createdAt}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!loading && list.length === 0}}">
+    <image src="/images/empty.png" mode="aspectFit"></image>
+    <text>暂无{{title}}</text>
+  </view>
+</view>

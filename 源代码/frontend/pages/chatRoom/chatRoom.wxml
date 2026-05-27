@@ -1,0 +1,303 @@
+<view 
+  class="chat-page"
+  bindtap="closeMediaPanel"
+  >
+
+<!-- 顶部 -->
+<view class="chat-header">
+
+  <view class="header-left"></view>
+
+  <view class="header-title-wrap">
+    <text class="header-title">{{groupInfo.name}}（{{groupInfo.memberCount}}）
+  </text>
+  </view>
+
+  <view class="header-more">
+    <image
+      class="detail-icon"
+      src="/assets/icons/detail.svg"
+      mode="aspectFit"
+      bindtap="goGroupDetail"
+    />
+  </view>
+
+</view>
+
+
+<!-- 消息列表 -->
+<scroll-view
+  class="msg-list"
+  scroll-y
+  enhanced
+  enable-flex
+  show-scrollbar="{{false}}"
+  scroll-with-animation
+  scroll-into-view="{{lastMsgId}}"
+>
+
+  <block wx:for="{{msgList}}" wx:key="msgId">
+
+    <!-- 时间 -->
+    <view
+      class="msg-time"
+      wx:if="{{item.showTime}}"
+    >
+      {{item.sendTime}}
+    </view>
+
+
+    <!-- 别人消息 -->
+    <view
+      wx:if="{{item.senderId != selfInfo.id}}"
+      class="msg-item left"
+      id="msg-{{item.msgId}}"
+    >
+
+      <!-- 头像 -->
+      <image
+        class="avatar"
+        src="{{item.avatarUrl}}"
+        mode="aspectFill"
+      />
+
+      <!-- 内容 -->
+      <view class="msg-content">
+
+        <!-- 群昵称 -->
+        <view
+        class="sender-row"
+        wx:if="{{chatType == 'group'}}"
+      >
+
+        <view class="sender-name">
+          {{item.nickname}}
+        </view>
+
+        <view
+          wx:if="{{item.role == 2}}"
+          class="owner-tag"
+        >
+          群主
+        </view>
+
+      </view>
+
+        <!-- 文本 -->
+        <view
+          wx:if="{{item.msgType === 0}}"
+          class="msg-bubble"
+        >
+          {{item.content}}
+        </view>
+
+        <!-- 图片 -->
+        <image
+          wx:if="{{item.msgType === 1}}"
+          class="msg-image"
+          src="{{item.mediaUrl}}"
+          mode="aspectFill"
+          bindtap="previewChatImage"
+          data-url="{{item.mediaUrl}}"
+        />
+
+        <!-- 语音 -->
+        <view
+          wx:if="{{item.msgType === 2}}"
+          class="voice-bubble"
+        >
+          🔊 语音消息
+        </view>
+
+        <!-- 视频 -->
+        <view
+          wx:if="{{item.msgType === 3}}"
+          class="msg-video-wrap"
+          bindtap="previewVideo"
+          data-url="{{item.mediaUrl}}"
+        >
+
+          <video
+            class="msg-video"
+            src="{{item.mediaUrl}}"
+            objectFit="cover"
+            muted="{{true}}"
+            show-play-btn="{{false}}"
+            controls="{{false}}"
+            enable-progress-gesture="{{false}}"
+          />
+
+          <view class="video-play-mask">
+            ▶
+          </view>
+
+        </view>
+
+      </view>
+
+    </view>
+
+
+    <!-- 自己消息 -->
+    <view
+      wx:else
+      class="msg-item right"
+      id="msg-{{item.msgId}}"
+    >
+
+      <!-- 内容 -->
+      <view class="msg-content self-content">
+        <!-- 群昵称 -->
+    <view
+      class="sender-row self-sender-row"
+      wx:if="{{chatType == 'group'}}"
+    >
+
+      <view
+        wx:if="{{item.role == 2}}"
+        class="owner-tag"
+      >
+        群主
+      </view>
+
+      <view class="sender-name">
+        {{item.nickname}}
+      </view>
+
+    </view>
+        <!-- 文本 -->
+        <view
+          wx:if="{{item.msgType === 0}}"
+          class="msg-bubble self"
+        >
+          {{item.content}}
+        </view>
+
+        <!-- 图片 -->
+        <image
+          wx:if="{{item.msgType === 1}}"
+          class="msg-image"
+          src="{{item.mediaUrl}}"
+          mode="aspectFill"
+          bindtap="previewChatImage"
+          data-url="{{item.mediaUrl}}"
+        />
+
+        <!-- 语音 -->
+        <view
+          wx:if="{{item.msgType === 2}}"
+          class="voice-bubble self-voice"
+        >
+          🔊 语音消息
+        </view>
+
+        <!-- 视频 -->
+        <view
+          wx:if="{{item.msgType === 3}}"
+          class="msg-video-wrap"
+          bindtap="previewVideo"
+          data-url="{{item.mediaUrl}}"
+        >
+
+          <video
+            class="msg-video"
+            src="{{item.mediaUrl}}"
+            objectFit="cover"
+            muted="{{true}}"
+            show-play-btn="{{false}}"
+            controls="{{false}}"
+            enable-progress-gesture="{{false}}"
+          />
+        </view>
+
+      </view>
+
+      <!-- 自己头像 -->
+      <image
+        class="avatar self-avatar"
+        src="{{item.avatarUrl}}"
+        mode="aspectFill"
+      />
+
+    </view>
+
+  </block>
+</scroll-view>
+
+
+<!-- 输入栏 -->
+<view 
+  class="input-bar"
+  catchtap="noop"
+>
+
+  <!-- 更多 -->
+  <view
+    class="media-btn"
+    bindtap="toggleMediaPanel"
+  >
+    <image
+      class="media-btn-icon"
+      src="/assets/icons/加号.svg"
+      mode="aspectFit"
+    />
+  </view>
+
+  <!-- 输入框 -->
+  <input
+    class="chat-input"
+    placeholder="输入消息"
+    value="{{inputContent}}"
+    bindinput="setInput"
+    confirm-type="send"
+    bindconfirm="sendMsg"
+    cursor-spacing="20"
+  />
+
+  <!-- 发送 -->
+  <view
+    class="send-btn"
+    bindtap="sendMsg"
+  >
+    发送
+  </view>
+
+</view>
+
+
+<!-- 媒体面板 -->
+<view
+  class="media-panel"
+  wx:if="{{showMediaPanel}}"
+  catchtap="noop"
+>
+
+  <!-- 图片 -->
+  <view
+    class="media-item"
+    bindtap="chooseAndSendImage"
+  >
+  <image
+    class="media-icon-image"
+    src="/assets/icons/图片_o.svg"
+    mode="aspectFit"
+  />
+    <text>图片</text>
+  </view>
+
+  <!-- 视频 -->
+  <view
+    class="media-item"
+    bindtap="chooseAndSendVideo"
+  >
+  <image
+    class="media-icon-image"
+    src="/assets/icons/视频.svg"
+    mode="aspectFit"
+  />
+    <text>视频</text>
+  </view>
+
+</view>
+
+</view>

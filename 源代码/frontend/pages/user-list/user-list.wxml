@@ -1,0 +1,57 @@
+<!-- pages/user-list/user-list.wxml -->
+<view class="user-list-page">
+  <!-- 导航栏 -->
+  <view class="nav-header">
+    <view class="back-btn" bindtap="goBack">
+      <text>←</text>
+    </view>
+    <view class="title">{{title}}</view>
+  </view>
+
+  <!-- 用户列表 -->
+  <view class="list-container" wx:if="{{!loading && list.length > 0}}">
+    <view
+      class="user-card"
+      wx:for="{{list}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goToProfile"
+    >
+      <image
+        wx:if="{{item.avatarUrl}}"
+        class="avatar"
+        src="{{item.avatarUrl}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="avatar avatar-fallback">
+        {{item.nickname[0] || '用'}}
+      </view>
+
+      <view class="info">
+        <view class="name-row">
+          <text class="nickname">{{item.nickname || '用户' + item.id}}</text>
+          <text class="verify-badge" wx:if="{{item.verifyStatus === 2}}">已认证</text>
+        </view>
+
+        <text class="desc">
+          {{item.bio || item.school || item.grade || '暂无简介'}}
+        </text>
+      </view>
+
+      <view class="arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>努力加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!loading && list.length === 0}}">
+    <image src="/images/empty.png" mode="aspectFit"></image>
+    <text wx:if="{{type === 'search'}}">未找到相关用户</text>
+    <text wx:else>暂无{{title}}</text>
+  </view>
+</view>

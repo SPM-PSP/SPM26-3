@@ -1,0 +1,199 @@
+/* pages/search/search.wxss */
+page { background-color: #fcfcff; font-family: -apple-system, sans-serif; }
+.page-container { width: 100%; display: block; padding: 0; margin: 0; }
+
+/* 1. 导航与搜索 */
+.custom-nav { background: #fff; width: 100%; text-align: center; }
+.nav-title { height: 44px; line-height: 44px; font-weight: bold; font-size: 34rpx; }
+
+.search-box { background: #fff; padding: 20rpx 30rpx 30rpx; }
+.search-inner {
+  height: 90rpx; background: #fff; border-radius: 45rpx;
+  display: flex; align-items: center; padding: 0 10rpx 0 40rpx;
+  box-shadow: 0 4rpx 24rpx rgba(124, 102, 245, 0.08);
+}
+.search-inner input { flex: 1; margin-left: 20rpx; font-size: 28rpx; }
+.search-btn {
+  width: 130rpx; height: 72rpx; background: #7c66f5; color: #fff;
+  border-radius: 36rpx; display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx; font-weight: bold;
+}
+
+/* 2. 兴趣选择 */
+.interest-wrap { padding: 30rpx; }
+.section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30rpx; }
+.st-title { font-weight: bold; font-size: 30rpx; }
+.st-more { font-size: 24rpx; color: #bbb; }
+
+.interest-grid { display: flex; justify-content: space-between; text-align: center; }
+.int-item { width: 100rpx; position: relative; }
+.int-icon {
+  width: 90rpx; height: 90rpx; border-radius: 30rpx; margin: 0 auto 15rpx;
+  display: flex; align-items: center; justify-content: center; font-size: 40rpx;
+}
+.int-name { font-size: 24rpx; color: #666; }
+.int-item.active .int-name { color: #7c66f5; font-weight: bold; }
+.int-item.active::after {
+  content: ''; position: absolute; bottom: -15rpx; left: 30%; width: 40%; height: 4rpx; background: #7c66f5; border-radius: 2rpx;
+}
+
+/* 3. Tab 筛选 */
+/* .filter-tabs { white-space: nowrap; padding: 20rpx 30rpx; border-bottom: 1rpx solid #f2f2f2; } */
+.filter-tabs {
+  display: flex;
+  justify-content: space-between; /* 核心：强制左右两端对齐 */
+  align-items: center;
+  width: 100%;
+  padding: 20rpx 30rpx; /* 侧边留白 */
+  background: #fff;
+  box-sizing: border-box;
+}
+
+/* 左侧容器 */
+.left-tabs {
+  display: flex;
+  gap: 30rpx; /* 智能推荐和最新发布之间的间距 */
+}
+
+/* 右侧容器 */
+.right-tabs {
+  display: flex;
+  gap: 25rpx; /* 时间和热度之间的间距 */
+}
+
+.f-tab {
+  font-size: 28rpx;
+  color: #999;
+  position: relative;
+  padding: 10rpx 0;
+  transition: all 0.2s;
+  white-space: nowrap; /* 防止换行 */
+}
+
+/* 激活状态：紫色和下划线 */
+.f-tab.active {
+  color: #7c66f5;
+  font-weight: bold;
+}
+
+/* 蓝色下划线（根据你截图的视觉效果添加） */
+.f-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -10rpx;
+  left: 15%;
+  width: 70%;
+  height: 4rpx;
+  background: #7c66f5;
+  border-radius: 2rpx;
+}
+
+/* 下拉项样式 */
+.dropdown {
+  display: flex;
+  align-items: center;
+  color: #666; /* 下拉项颜色稍深，增加区分度 */
+}
+
+.arrow {
+  font-size: 16rpx;
+  margin-left: 8rpx;
+  transform: scale(0.8);
+  opacity: 0.5;
+}
+
+/* 点击反馈 */
+.f-tab:active {
+  opacity: 0.6;
+}
+
+/* 4. 统计栏 */
+.stats-bar { display: flex; justify-content: space-between; padding: 30rpx 40rpx; font-size: 24rpx; color: #aaa; }
+.purple-num { color: #7c66f5; font-weight: bold; }
+
+/* 5. 帖子卡片 (核心部分) */
+.card-list { padding: 0 30rpx; }
+.p-card {
+  background: #fff; border-radius: 36rpx; padding: 40rpx; margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0,0,0,0.02); position: relative; overflow: hidden;
+}
+
+/* 卡片装饰物 */
+.card-deco {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  font-size: 160rpx; opacity: 0.05; z-index: 0; pointer-events: none;
+}
+
+.card-header { display: flex; align-items: center; position: relative; z-index: 1; }
+.u-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
+.u-meta { margin-left: 20rpx; flex: 1; }
+.u-name { font-size: 30rpx; font-weight: bold; }
+.u-sex { margin-left: 10rpx; font-size: 24rpx; font-weight: bold; color: #4dabff; }
+.u-sub { font-size: 22rpx; color: #bbb; margin-top: 5rpx; }
+.u-sub text { margin-right: 15rpx; }
+.c-tag { background: #f4f2ff; color: #7c66f5; font-size: 22rpx; padding: 6rpx 20rpx; border-radius: 12rpx; }
+
+.card-body { margin-top: 30rpx; position: relative; z-index: 1; }
+.p-title { font-size: 36rpx; font-weight: bold; margin-bottom: 12rpx; color: #333; }
+.p-desc { font-size: 26rpx; color: #888; margin-bottom: 25rpx; line-height: 1.5; width: 85%; }
+.p-pills text { display: inline-block; background: #f5f6f8; color: #999; font-size: 22rpx; padding: 8rpx 24rpx; border-radius: 30rpx; margin-right: 15rpx; }
+
+.card-footer {
+  margin-top: 35rpx; padding-top: 30rpx; border-top: 1rpx solid #f8f8f8;
+  display: flex; align-items: center; font-size: 24rpx; color: #bbb; position: relative; z-index: 1;
+}
+.f-item { margin-right: 30rpx; flex: 1; }
+.red-num { color: #ff5e62; font-weight: bold; font-size: 28rpx; }
+.no-more { text-align: center; color: #ddd; font-size: 24rpx; padding: 40rpx 0; }
+
+/* 增加点击反馈，让用户知道点到了 */
+.int-item:active, .f-tab:active, .search-btn:active {
+  opacity: 0.7;
+  transform: scale(0.95);
+  transition: all 0.1s;
+}
+
+/* 优化下拉箭头位置 */
+.arrow {
+  display: inline-block;
+  transform: scale(0.8);
+  vertical-align: middle;
+}
+
+.u-avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  flex-shrink: 0;
+}
+
+/* ...原有样式保持不变 ... */
+
+.u-avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  flex-shrink: 0;
+}
+
+/* [新增] 帖子图片相关样式 */
+.p-image-wrap {
+  width: 100%;
+  height: 300rpx; /* 搜索页高度稍矮一点更精致 */
+  margin: 20rpx 0 25rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  background-color: #f1f5f9;
+}
+
+.p-main-image {
+  width: 100%;
+  height: 100%;
+}
+
+/* 点击反馈 */
+.p-card:active .p-main-image {
+  opacity: 0.9;
+}

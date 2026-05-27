@@ -1,0 +1,52 @@
+<view class="container" style="width: 749rpx; display: flex; box-sizing: border-box">
+  <!-- 顶部提示 -->
+  <view class="tip-box">
+    <view class="title">学生认证</view>
+    <view class="desc">认证后即可解锁全部功能</view>
+  </view>
+
+  <!-- 状态提示 -->
+  <view class="status-tip" wx:if="{{statusMsg}}">
+    <text class="status-text">{{statusMsg}}</text>
+  </view>
+
+  <!-- 表单（仅当可编辑时显示） -->
+  <view class="form" style="width: 587rpx; display: block; box-sizing: border-box" wx:if="{{canEdit}}">
+    <view class="form-item" style="width: 475rpx; display: block; box-sizing: border-box; position: relative; left: -35rpx; top: 0rpx">
+      <text class="label" style="width: 460rpx; display: block; box-sizing: border-box; position: relative; left: 0rpx; top: 0rpx">真实姓名</text>
+      <input style="width: 460rpx; display: block; box-sizing: border-box; position: relative; left: 0rpx; top: 0rpx" class="input" placeholder="请输入真实姓名" value="{{form.realName}}" bindinput="onRealNameInput" />
+    </view>
+
+    <view class="form-item" style="position: relative; left: -35rpx; top: -4rpx; width: 475rpx; display: block; box-sizing: border-box">
+      <text class="label">学号</text>
+      <input style="width: 460rpx; display: block; box-sizing: border-box" class="input" placeholder="请输入学号" value="{{form.studentNo}}" bindinput="onStudentNoInput" />
+    </view>
+
+    <view class="form-item" style="position: relative; left: -35rpx; top: -8rpx; width: 475rpx; display: block; box-sizing: border-box">
+      <text class="label">学校</text>
+      <input style="width: 460rpx; display: block; box-sizing: border-box" class="input" placeholder="请输入学校名称" value="{{form.school}}" bindinput="onSchoolInput" />
+    </view>
+
+    <!-- 证明材料上传 -->
+    <view class="form-item" style="position: relative; left: -35rpx; top: -12rpx; width: 475rpx; display: block; box-sizing: border-box">
+      <text class="label">证明材料</text>
+      <view class="upload-area" bindtap="chooseImage">
+        <image wx:if="{{form.proofImageUrl}}" class="upload-image" src="{{form.proofImageUrl}}" mode="aspectFill"></image>
+        <view wx:else class="upload-placeholder">
+          <text class="plus">+</text>
+          <text class="upload-text">上传学生证/校园卡</text>
+        </view>
+      </view>
+      <text class="hint">请上传含有姓名和学号的证件照片</text>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <button class="submit-btn {{isFormComplete ? '' : 'btn-disabled'}}" bindtap="submitVerify" wx:if="{{canEdit && !submitting}}" disabled="{{!isFormComplete}}">提交认证</button>
+  <button class="submit-btn disabled" wx:if="{{submitting}}" disabled>提交中...</button>
+
+  <!-- 已认证通过 -->
+  <view class="verified-tip" wx:if="{{verified}}">
+    <text class="pass">✓ 已通过学生认证</text>
+  </view>
+</view>

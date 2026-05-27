@@ -1,0 +1,95 @@
+<view class="page-container">
+  <view class="header-bar">
+    <view class="nav-left"></view>
+
+    <text class="page-title">发布动态</text>
+
+    <view class="nav-right">
+      <view class="publish-btn" bindtap="submitDynamic">发布</view>
+    </view>
+  </view>
+
+  <view class="form-card">
+    <text class="form-label">动态标题</text>
+    <input
+      class="form-input"
+      placeholder="用一句话概括你的动态"
+      bindinput="setTitle"
+      value="{{title}}"
+      maxlength="30"
+    />
+    <text class="char-count">{{title.length}}/30</text>
+  </view>
+
+  <view class="form-card">
+    <text class="form-label">动态内容</text>
+    <textarea
+      class="content-input"
+      placeholder="分享你的攻略、经验或心情..."
+      bindinput="setContent"
+      value="{{content}}"
+      maxlength="500"
+    />
+    <text class="char-count">{{content.length}}/500</text>
+  </view>
+
+  <view class="form-card">
+    <text class="form-label">发布地点（选填）</text>
+    <input
+      class="form-input"
+      placeholder="输入地点，如：上海交通大学"
+      bindinput="setLocation"
+      value="{{location}}"
+    />
+  </view>
+
+  <view class="form-card">
+    <text class="form-label">添加标签（选填）</text>
+    <view class="tag-group">
+      <view
+        class="tag-item {{item.active ? 'active' : ''}}"
+        wx:for="{{tagsList}}"
+        wx:key="name"
+        bindtap="toggleTag"
+        data-name="{{item.name}}"
+      >
+        {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <view class="form-card">
+    <text class="form-label">添加图片（选填）</text>
+
+    <view class="image-grid">
+      <view
+        class="image-item"
+        wx:for="{{imgList}}"
+        wx:key="*this"
+      >
+        <image
+          src="{{item}}"
+          mode="aspectFill"
+          bindtap="previewImage"
+          data-url="{{item}}"
+        />
+        <view
+          class="delete-img"
+          bindtap="deleteImage"
+          data-index="{{index}}"
+        >
+          ×
+        </view>
+      </view>
+
+      <view
+        class="upload-card"
+        bindtap="chooseImage"
+        wx:if="{{imgList.length < 9}}"
+      >
+        <text class="upload-icon">+</text>
+        <text class="upload-text">{{imgList.length}}/9</text>
+      </view>
+    </view>
+  </view>
+</view>

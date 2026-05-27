@@ -1,0 +1,77 @@
+/* 全局主题色：和你的搭子星球图标、动态页统一 */
+page {
+  background-color: #F8F9FF;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.page-container {
+  padding: 0 30rpx;
+  padding-bottom: 120rpx; /* 避开底部TabBar */
+}
+
+/* 顶部标题栏 */
+.header-bar {
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.page-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: #1F2937;
+}
+
+/* 通知入口列表（横向三栏布局） */
+.entry-list {
+  display: flex;
+  justify-content: space-around;
+  margin: 30rpx 0;
+}
+.entry-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* 入口图标（和截图风格一致的圆角卡片） */
+.icon-box {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(165,216,255,0.1);
+}
+/* 入口图标背景色（和主题色适配） */
+.icon-box.like {
+  background-color: #FFE4EC; /* 浅粉，对应点赞 */
+}
+.icon-box.follow {
+  background-color: #EDE7F6; /* 浅紫，对应关注 */
+}
+.icon-box.comment {
+  background-color: #E0F4FF; /* 浅蓝，对应评论 */
+}
+.entry-text {
+  font-size: 26rpx;
+  color: #1F2937;
+}
+
+/* 空状态（和截图文字、排版一致） */
+.empty-state {
+  margin-top: 200rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.empty-title {
+  font-size: 32rpx;
+  color: #9CA3AF;
+  margin-bottom: 12rpx;
+}
+.empty-subtitle {
+  font-size: 26rpx;
+  color: #B0B8C4;
+}

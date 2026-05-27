@@ -1,0 +1,83 @@
+page { background-color: #fcfcff; }
+.page-container { width: 100%; display: block; padding-bottom: 140rpx;}
+
+/* 导航与搜索 */
+.custom-nav { background: #fff; width: 100%; text-align: center; }
+.nav-title { height: 44px; line-height: 44px; font-weight: bold; font-size: 34rpx; color: #333; }
+
+.search-wrap { background: #fff; padding: 10rpx 30rpx 30rpx; }
+.search-inner {
+  height: 76rpx; background: #f6f7fa; border-radius: 38rpx;
+  display: flex; align-items: center; padding: 0 30rpx;
+}
+.search-inner input { flex: 1; margin-left: 15rpx; font-size: 26rpx; }
+
+/* 系统通知入口 */
+.system-section {
+  background: #fff; margin: 20rpx 30rpx; padding: 30rpx;
+  border-radius: 30rpx; display: flex; align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.02);
+}
+.sys-icon-wrap { position: relative; margin-right: 25rpx; }
+.sys-icon { width: 100rpx; height: 100rpx; background: #f0edff; border-radius: 25rpx; display: flex; align-items: center; justify-content: center; font-size: 44rpx; }
+.badge {
+  position: absolute; top: -10rpx; right: -10rpx;
+  background: #ff5e62; color: #fff; font-size: 20rpx;
+  padding: 4rpx 12rpx; border-radius: 20rpx; border: 4rpx solid #fff;
+}
+.sys-content { flex: 1; }
+.sys-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.sys-name { font-weight: bold; font-size: 30rpx; color: #333; }
+.sys-time { font-size: 22rpx; color: #bbb; }
+.sys-desc { font-size: 24rpx; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400rpx; }
+.sys-arrow { color: #eee; font-size: 24rpx; margin-left: 10rpx; }
+
+/* 会话列表 */
+.chat-list-container { padding: 20rpx 30rpx; }
+.list-title { font-size: 26rpx; color: #999; margin-bottom: 25rpx; padding-left: 10rpx; }
+
+.chat-item {
+  display: flex; align-items: center; padding: 30rpx 0;
+  border-bottom: 1rpx solid #f8f9fb;
+}
+.chat-item:active { background: #f9f9f9; }
+
+.avatar-wrap { position: relative; margin-right: 25rpx; }
+.avatar-main { width: 110rpx; height: 110rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40rpx; color: #fff; font-weight: bold; }
+.unread-dot {
+  position: absolute; top: 0; right: 0;
+  background: #ff5e62; color: #fff; font-size: 18rpx;
+  width: 32rpx; height: 32rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 3rpx solid #fff;
+}
+
+.chat-info { flex: 1; }
+.info-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10rpx; }
+.name-row { display: flex; align-items: center; }
+.chat-name { font-size: 32rpx; font-weight: bold; color: #333; max-width: 340rpx; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.group-tag { background: #f0edff; color: #7c66f5; font-size: 18rpx; padding: 2rpx 10rpx; border-radius: 6rpx; margin-left: 12rpx; }
+.chat-time { font-size: 22rpx; color: #bbb; }
+
+.info-bottom { display: flex; justify-content: space-between; align-items: center; }
+.last-msg { font-size: 26rpx; color: #999; max-width: 400rpx; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scene-tag { font-size: 20rpx; color: #bbb; border: 1rpx solid #eee; padding: 2rpx 12rpx; border-radius: 20rpx; }
+
+.empty-hint { text-align: center; color: #ccc; font-size: 26rpx; padding-top: 100rpx; }
+
+.loading-state {
+  text-align: center;
+  font-size: 24rpx;
+  color: #7c66f5;
+  padding: 20rpx;
+}
+
+.empty-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  font-size: 26rpx;
+  padding-top: 150rpx;
+}

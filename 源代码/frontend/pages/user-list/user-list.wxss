@@ -1,0 +1,253 @@
+/* pages/user-list/user-list.wxss */
+
+page {
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+/* 页面 */
+.user-list-page {
+  min-height: 100vh;
+  background: #f5f6fa;
+
+  /* 给顶部导航预留空间 */
+  padding-top: 170rpx;
+
+  box-sizing: border-box;
+}
+
+/* 顶部导航栏 */
+.nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 88rpx;
+
+  padding: 88rpx 24rpx 0;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1rpx solid #f0f0f0;
+
+  z-index: 999;
+
+  backdrop-filter: blur(20rpx);
+}
+
+/* 返回按钮 */
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+
+  border-radius: 18rpx;
+
+  background: #f3f4f7;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 34rpx;
+  color: #222;
+
+  flex-shrink: 0;
+}
+
+/* 标题 */
+.title {
+  margin-left: 20rpx;
+
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+/* 列表区域 */
+.list-container {
+  padding: 32rpx 24rpx;
+  box-sizing: border-box;
+}
+
+/* 用户卡片 */
+.user-card {
+  width: 100%;
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border-radius: 30rpx;
+
+  padding: 28rpx;
+
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 24rpx;
+
+  box-shadow:
+    0 8rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 头像 */
+.avatar {
+  width: 104rpx;
+  height: 104rpx;
+
+  border-radius: 50%;
+
+  background: #eee;
+
+  flex-shrink: 0;
+}
+
+/* 默认头像 */
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    135deg,
+    #7ea6ff,
+    #5d7dff
+  );
+
+  color: #fff;
+
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+/* 信息区域 */
+.info {
+  flex: 1;
+
+  margin-left: 24rpx;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+/* 名称行 */
+.name-row {
+  display: flex;
+  align-items: center;
+}
+
+/* 昵称 */
+.nickname {
+  font-size: 34rpx;
+  font-weight: 700;
+
+  color: #111;
+
+  max-width: 360rpx;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 认证标签 */
+.verify-badge {
+  margin-left: 12rpx;
+
+  padding: 4rpx 14rpx;
+
+  border-radius: 999rpx;
+
+  background: rgba(59, 130, 246, 0.12);
+
+  color: #2563eb;
+
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+/* 简介 */
+.desc {
+  margin-top: 12rpx;
+
+  font-size: 26rpx;
+  color: #8b93a7;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 右箭头 */
+.arrow {
+  margin-left: 16rpx;
+
+  color: #c5c9d3;
+
+  font-size: 42rpx;
+  font-weight: 300;
+}
+
+/* 加载中 */
+.loading {
+  padding-top: 240rpx;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 加载动画 */
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+
+  border-radius: 50%;
+
+  border: 6rpx solid #dbe3ff;
+  border-top-color: #5b7fff;
+
+  animation: spin 0.8s linear infinite;
+
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 空状态 */
+.empty {
+  padding-top: 240rpx;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty image {
+  width: 280rpx;
+  height: 280rpx;
+}
+
+.empty text {
+  margin-top: 20rpx;
+
+  font-size: 28rpx;
+  color: #999;
+}

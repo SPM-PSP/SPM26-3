@@ -1,0 +1,28 @@
+<view class="page-container">
+  <!-- 顶部标题栏（和截图一致居中标题） -->
+  <view class="header-bar">
+    <text class="page-title">消息</text>
+  </view>
+
+  <!-- 通知入口区：点赞/关注/评论 -->
+  <view class="entry-list">
+    <view class="entry-item" bindtap="goLikeNotice">
+      <view class="icon-box like">❤️</view>
+      <text class="entry-text">获得的赞</text>
+    </view>
+    <view class="entry-item" bindtap="goFollowNotice">
+      <view class="icon-box follow">👥</view>
+      <text class="entry-text">新增关注</text>
+    </view>
+    <view class="entry-item" bindtap="goCommentNotice">
+      <view class="icon-box comment">💬</view>
+      <text class="entry-text">评论</text>
+    </view>
+  </view>
+
+  <!-- 空状态提示（和截图完全一致） -->
+  <view class="empty-state">
+    <text class="empty-title">暂无通知</text>
+    <text class="empty-subtitle">有新的通知会在这里显示</text>
+  </view>
+</view>

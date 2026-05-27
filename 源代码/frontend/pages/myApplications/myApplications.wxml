@@ -1,0 +1,98 @@
+<view class="page-wrapper">
+  <!-- 1. 顶部 Tab -->
+  <view class="header-tab">
+    <view class="tab-box">
+      <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+        <text>发出的申请</text>
+        <view class="indicator"></view>
+      </view>
+      <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+        <text>收到的申请</text>
+        <view class="indicator"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 2. 下拉筛选栏 (仅在收到申请Tab展示) -->
+  <view class="dropdown-container" wx:if="{{currentTab === 1}}">
+    <view class="dropdown-trigger" bindtap="toggleDropdown">
+      <text class="select-txt">{{selectedPostName}}</text>
+      <view class="arrow {{showDropdown ? 'open' : ''}}">▼</view>
+    </view>
+
+    <!-- 下拉菜单列表 -->
+    <view class="dropdown-menu {{showDropdown ? 'show' : ''}}">
+      <view class="menu-item {{filterPostId === '' ? 'active' : ''}}" 
+            bindtap="onSelectFilter" data-id="" data-name="全部活动">全部活动</view>
+      <view class="menu-item {{filterPostId == item.id ? 'active' : ''}}" 
+            wx:for="{{myPosts}}" wx:key="id" 
+            bindtap="onSelectFilter" data-id="{{item.id}}" data-name="{{item.title}}">
+        {{item.title}}
+      </view>
+    </view>
+    
+    <!-- 遮罩层 -->
+    <view class="mask" wx:if="{{showDropdown}}" bindtap="toggleDropdown"></view>
+  </view>
+
+  <!-- 3. 滚动列表区 -->
+  <scroll-view class="content-scroll" scroll-y enable-flex refresher-enabled="{{true}}" refresher-triggered="{{isLoading}}" bindrefresherrefresh="onPullDownRefresh">
+    <view class="list-padding">
+      
+      <!-- A. 我发出的申请 -->
+      <block wx:if="{{currentTab === 0}}">
+        <view class="apply-card" wx:for="{{sentList}}" wx:key="id">
+          <view class="card-header">
+            <image class="avatar" src="{{item.targetAvatar}}" mode="aspectFill"></image>
+            <view class="user-info">
+              <text class="username">{{item.targetName}}</text>
+              <text class="time">{{item.time}}</text>
+            </view>
+            <view class="status-tag {{item.statusClass}}">{{item.statusText}}</view>
+          </view>
+          <view class="card-body">
+            <text class="label">申请加入</text>
+            <text class="post-title">{{item.postTitle}}</text>
+            <view class="message-box">“{{item.message || '我想加入！'}}”</view>
+          </view>
+          <view class="card-footer" wx:if="{{item.status === 0}}">
+            <view class="btn-cancel" bindtap="cancelApply" data-id="{{item.id}}" data-postid="{{item.postId}}">撤回申请</view>
+          </view>
+        </view>
+      </block>
+
+      <!-- B. 我收到的申请 -->
+      <block wx:if="{{currentTab === 1}}">
+        <view class="apply-card" wx:for="{{receivedList}}" wx:key="id">
+          <view class="card-header">
+            <image class="avatar" src="{{item.userAvatar}}" mode="aspectFill"></image>
+            <view class="user-info">
+              <text class="username">{{item.userName}}</text>
+              <text class="time">{{item.time}}</text>
+            </view>
+            <view class="status-tag {{item.statusClass}}">{{item.statusText}}</view>
+          </view>
+          <view class="card-body">
+            <text class="label">针对我的帖子</text>
+            <text class="post-title">{{item.postTitle}}</text>
+            <view class="message-box">“{{item.message || '没有留言'}}”</view>
+          </view>
+          <view class="card-footer" wx:if="{{item.status === 0}}">
+            <view class="btn btn-reject" bindtap="handleApply" data-type="reject" data-id="{{item.id}}" data-postid="{{item.postId}}">拒绝</view>
+            <view class="btn btn-accept" bindtap="handleApply" data-type="accept" data-id="{{item.id}}" data-postid="{{item.postId}}">通过申请</view>
+          </view>
+          <view class="card-footer" wx:if="{{item.status === 1}}">
+            <view class="btn btn-accept" bindtap="goChat">去聊天</view>
+          </view>
+        </view>
+      </block>
+
+      <!-- C. 空状态 -->
+      <view class="empty-box" wx:if="{{(currentTab===0 && sentList.length===0) || (currentTab===1 && receivedList.length===0)}}">
+        <view class="empty-icon">📂</view>
+        <text class="empty-text">暂无相关记录</text>
+      </view>
+
+    </view>
+  </scroll-view>
+</view>

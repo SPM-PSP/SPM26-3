@@ -1,0 +1,310 @@
+<view class="page">
+  <!-- 顶部渐变用户信息区 -->
+<!-- 顶部渐变用户信息区 -->
+<view class="header">
+  <view class="header-bg"></view>
+  <view class="user-info">
+    <image class="avatar" src="{{userInfo.avatarUrl || userInfo.avatar || '/images/logo.png'}}" mode="aspectFill"></image>
+    <view class="info-right">
+      <view class="name-wrap">
+        <text class="nickname">{{userInfo.nickname || '微信用户'}}</text>
+        <view class="edit-icon" bindtap="goEditProfile">✏️</view>
+      </view>
+      
+      <!-- 兴趣标签 -->
+      <view class="tags-wrap" wx:if="{{interestTags.length > 0}}">
+        <text class="tag" wx:for="{{interestTags}}" wx:key="index">{{item}}</text>
+      </view>
+      
+      <!-- 个人简介 -->
+      <view class="bio" wx:if="{{userInfo.bio}}">
+        <text>{{userInfo.bio}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 关注数据行 -->
+  <view class="stats-wrap">
+    <view class="stat-item" bindtap="goFollowers">
+      <view class="stat-num">{{followerCount}}</view>
+      <view class="stat-label">粉丝</view>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item" bindtap="goFollowing">
+      <view class="stat-num">{{followingCount}}</view>
+      <view class="stat-label">关注</view>
+    </view>
+  </view>
+</view>
+
+  <!-- 我的搭子 Tab 栏 -->
+  <view class="tab-bar">
+    <view class="tab-item {{tabIndex === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">我发布的</view>
+    <view class="tab-item {{tabIndex === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">我申请的</view>
+    <!-- <view class="tab-item {{tabIndex === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">已结束</view> -->
+  </view>
+
+<!-- 我发布的列表 -->
+<view class="list-container" wx:if="{{tabIndex === 0}}">
+  <block wx:if="{{displayPublishList.length > 0}}">
+    <view class="post-card" wx:for="{{displayPublishList}}" wx:key="id">
+      
+      <!-- 卡片主体 -->
+      <view class="card-main" data-id="{{item.id}}" bindtap="goPalDetail">
+        <view class="card-top">
+          <view class="tag {{item.scene === 'travel' ? 'travel' : (item.scene === 'eat' ? 'eat' : 'sport')}}">
+            {{item.scene === 'travel' ? '✈️ 旅行' : (item.scene === 'eat' ? '🍚 干饭' : '🏃 运动')}}
+          </view>
+          <!-- 帖子状态：0招募中 1已满员 2已结束 3已取消 -->
+            <view class="status {{item.status === 0 ? 'recruiting' : (item.status === 1 ? 'full' : (item.status === 2 ? 'ended' : 'cancelled'))}}">
+              <text wx:if="{{item.status === 0}}">招募中</text>
+              <text wx:elif="{{item.status === 1}}">已满员</text>
+              <text wx:elif="{{item.status === 2}}">已结束</text>
+              <text wx:elif="{{item.status === 3}}">已取消</text>
+            </view>
+          </view>
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-content">{{item.content}}</view>
+        <view class="card-footer">
+          <view class="time">⏱️ {{item.startTime ? item.startTime.slice(0,10) : '待定'}}</view>
+          <view class="apply-count">👥 {{item.currentCount || 0}}/{{item.expectedCount}}人</view>
+        </view>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="card-actions">
+        <!-- 申请列表按钮（带红点） -->
+        <view class="action-btn" data-id="{{item.id}}" catchtap="toggleApplications">
+          <text>📋 申请列表</text>
+          <text wx:if="{{item.pendingCount > 0}}" class="red-dot">
+            {{item.pendingCount}}
+          </text>
+        </view>
+        <view class="action-btn edit-btn" data-id="{{item.id}}" catchtap="editPublishPost">
+          <text>✏️ 编辑</text>
+        </view>
+        <view class="action-btn finish-btn" data-id="{{item.id}}" catchtap="finishPublishPost" wx:if="{{item.status === 0}}">
+          <text>✅ 结束</text>
+        </view>
+        <view class="action-btn delete-btn" data-id="{{item.id}}" catchtap="deletePublishPost">
+          <text>🗑️ 删除</text>
+        </view>
+      </view>
+      
+      <!-- 展开的申请列表 -->
+      <view class="applications-section" wx:if="{{expandedPostId === item.id}}">
+        <!-- 加载中 -->
+        <view class="apps-loading" wx:if="{{loadingApps}}">
+          <text>加载中...</text>
+        </view>
+        
+        <!-- 申请列表内容 -->
+        <block wx:elif="{{applicationsMap[item.id] && applicationsMap[item.id].length > 0}}">
+          <!-- 统计栏 - 直接使用预处理的 stats -->
+          <view class="apps-stats">
+            <view class="stat">总数: {{applicationsStats[item.id].total}}</view>
+            <view class="stat pending">待审核: {{applicationsStats[item.id].pending}}</view>
+            <view class="stat approved">已通过: {{applicationsStats[item.id].approved}}</view>
+            <view class="stat rejected">已拒绝: {{applicationsStats[item.id].rejected}}</view>
+          </view>
+          
+          <!-- 申请条目 -->
+          <view class="application-item" wx:for="{{applicationsMap[item.id]}}" wx:for-item="app" wx:key="id">
+            <view class="app-info" bindtap="viewApplicantProfile" data-id="{{app.applicantId}}">
+              <image class="app-avatar" src="{{app.applicantAvatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+              <view class="app-detail">
+                <view class="app-name">{{app.applicantName || '用户' + app.applicantId}}</view>
+                <view class="app-time">{{app.createdAt}}</view>
+              </view>
+              <view class="app-status {{app.status === 0 ? 'pending' : (app.status === 1 ? 'approved' : 'rejected')}}">
+                <text wx:if="{{app.status === 0}}">待审核</text>
+                <text wx:elif="{{app.status === 1}}">已通过</text>
+                <text wx:elif="{{app.status === 2}}">已拒绝</text>
+              </view>
+            </view>
+            
+            <view class="app-message">
+              <text class="message-label">留言：</text>
+              <text class="message-content">{{app.message || '无留言'}}</text>
+            </view>
+            
+            <!-- 操作按钮（仅待审核显示） -->
+            <view class="app-actions" wx:if="{{app.status === 0}}">
+              <view class="app-btn reject" catchtap="reviewApplication" data-post-id="{{item.id}}" data-app-id="{{app.id}}" data-status="2">
+                拒绝
+              </view>
+              <view class="app-btn approve" catchtap="reviewApplication" data-post-id="{{item.id}}" data-app-id="{{app.id}}" data-status="1">
+                通过
+              </view>
+            </view>
+          </view>
+        </block>
+        
+        <!-- 空状态 -->
+        <view class="apps-empty" wx:elif="{{!loadingApps}}">
+          <text>暂无申请</text>
+        </view>
+      </view>
+    </view>
+  </block>
+  
+  <!-- 全部按钮 -->
+  <view class="view-all-btn" wx:if="{{publishList.length > 2}}" bindtap="goToFullList" data-type="publish">
+    <text>查看全部 {{publishList.length}} 条 →</text>
+  </view>
+  
+  <view wx:if="{{publishList.length === 0}}" class="empty-tip">暂无发布</view>
+</view>
+
+  <!-- 我申请的列表 -->
+  <view class="list-container" wx:if="{{tabIndex === 1}}">
+    <block wx:if="{{applyList.length > 0}}">
+      <view class="post-card" wx:for="{{displayApplyList}}" wx:key="id" bindtap="goPostDetail" data-id="{{item.id}}">
+        <view class="card-top">
+          <view class="tag {{item.scene === 'travel' ? 'travel' : (item.scene === 'eat' ? 'eat' : 'sport')}}">
+            {{item.scene === 'travel' ? '✈️ 旅行' : (item.scene === 'eat' ? '🍚 干饭' : '🏃 运动')}}
+          </view>
+            <view class="apply-status-tag {{item.applicationStatus === 0 ? 'pending' : (item.applicationStatus === 1 ? 'approved' : 'rejected')}}">
+              <text wx:if="{{item.applicationStatus === 0}}">审核中</text>
+              <text wx:elif="{{item.applicationStatus === 1}}">已通过</text>
+              <text wx:elif="{{item.applicationStatus === 2}}">已拒绝</text>
+              <text wx:elif="{{item.applicationStatus === 3}}">已取消</text>
+            </view>
+          </view>
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-footer">
+          <view class="time">⏱️ {{item.startTime ? item.startTime.slice(0,10) : '待定'}}</view>
+          <view class="apply-count">👥 {{item.currentCount || 0}}/{{item.expectedCount}}人</view>
+        </view>
+      </view>
+    </block>
+     <!-- 全部按钮 -->
+  <view class="view-all-btn" wx:if="{{applyList.length > 2}}" bindtap="goToFullList" data-type="apply">
+    <text>查看全部 {{applyList.length}} 条 →</text>
+  </view>
+    <view wx:if="{{applyList.length === 0}}" class="empty-tip">暂无申请记录</view>
+  </view>
+
+  <!-- 已成功列表 -->
+  <view class="list-container" wx:if="{{tabIndex === 2}}">
+    <block wx:if="{{DisplaySuccessList.length > 0}}">
+      <view class="post-card" wx:for="{{displaySuccessList}}" wx:key="id" bindtap="goPostDetail" data-id="{{item.id}}">
+        <view class="card-top">
+          <view class="tag {{item.scene === 'travel' ? 'travel' : (item.scene === 'eat' ? 'eat' : 'sport')}}">
+            {{item.scene === 'travel' ? '✈️ 旅行' : (item.scene === 'eat' ? '🍚 干饭' : '🏃 运动')}}
+          </view>
+          <view class="status ended">已结束</view>
+        </view>
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-footer">
+          <view class="time">⏱️ {{item.startTime ? item.startTime.slice(0,10) : '待定'}}</view>
+          <view class="apply-count">👥 {{item.currentCount || 0}}/{{item.expectedCount}}人</view>
+        </view>
+      </view>
+    </block>
+    <!-- 全部按钮 -->
+    <view class="view-all-btn" wx:if="{{successList.length > 2}}" bindtap="goToFullList" data-type="success">
+      <text>查看全部 {{successList.length}} 条 →</text>
+    </view>
+    <view wx:if="{{successList.length === 0}}" class="empty-tip">暂无结束的搭子</view>
+  </view>
+
+   <!-- 我的动态入口卡片 -->
+<view class="moments-entry" bindtap="goMyMoments">
+  <view class="entry-left">
+    <text class="entry-icon">📝</text>
+    <text class="entry-title">我的动态</text>
+  </view>
+  <view class="entry-right">
+    <text class="entry-arrow">›</text>
+  </view>
+</view>
+
+<!-- 我的互动区域 -->
+<view class="interact-section">
+  <view class="section-title">我的互动</view>
+  <view class="menu-list">
+    <view class="menu-item" bindtap="goToLikedMoments">
+      <view class="menu-left">
+        <text class="menu-icon">❤️</text>
+        <text class="menu-text">我点赞的</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-count">{{myLikesCount}}</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+    <view class="menu-item" bindtap="goToFavoritedMoments">
+      <view class="menu-left">
+        <text class="menu-icon">⭐</text>
+        <text class="menu-text">我收藏的</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-count">{{myFavoritesCount}}</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+    <view class="menu-item" bindtap="goToMyComments">
+      <view class="menu-left">
+        <text class="menu-icon">💬</text>
+        <text class="menu-text">我的评论</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-count">{{myCommentsCount}}</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+  <!-- 更多功能模块 -->
+  <view class="more-section">
+    <view class="section-title">更多功能</view>
+    <view class="function-list">
+      <view class="function-item" bindtap="goPage" data-url="/pages/verify/verify">
+        <view class="func-left">
+          <view class="func-icon">🎓</view>
+          <view class="func-text">
+            <text class="func-name">学生认证</text>
+            <text class="func-desc">{{verifyStatusDesc || '未认证'}}</text>
+          </view>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+      <view class="function-item" bindtap="goPage" data-url="/pages/help/help">
+        <view class="func-left">
+          <view class="func-icon">❓</view>
+          <view class="func-text">
+            <text class="func-name">帮助与支持</text>
+            <text class="func-desc">使用指南、常见问题</text>
+          </view>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+      <view class="function-item" bindtap="goPage" data-url="/pages/contact/contact">
+        <view class="func-left">
+          <view class="func-icon">💬</view>
+          <view class="func-text">
+            <text class="func-name">客服中心</text>
+            <text class="func-desc">反馈问题、联系客服</text>
+          </view>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+      <view class="function-item" bindtap="goPage" data-url="/pages/settings/settings">
+        <view class="func-left">
+          <view class="func-icon">⚙️</view>
+          <view class="func-text">
+            <text class="func-name">设置</text>
+            <text class="func-desc">账号、隐私、通知</text>
+          </view>
+        </view>
+        <view class="arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录按钮 -->
+  <view class="logout-btn" bindtap="handleLogout">退出登录</view>
+</view>

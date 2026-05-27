@@ -1,0 +1,234 @@
+/* pages/my-moments/my-moments.wxss */
+page {
+  background: #f8f6ff;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  min-height: 100vh;
+  background: #f8f6ff;
+  padding-bottom: 40rpx;
+}
+
+/* 顶部导航栏 */
+.nav-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  padding: 28rpx 36rpx;
+  background: #ffffff;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  z-index: 99;
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #5e97d8;
+  background: rgba(161, 196, 253, 0.1);
+  border-radius: 50%;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2d2d44;
+}
+
+/* 动态列表 */
+.moments-list {
+  padding: 30rpx;
+}
+
+.moment-card {
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(161, 196, 253, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 卡片顶部小装饰条 */
+.moment-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8rpx;
+  background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 50%, #fbc2eb 100%);
+}
+
+/* 卡片头部 */
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  margin-right: 24rpx;
+  border: 3rpx solid rgba(161, 196, 253, 0.2);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #2d2d44;
+  margin-bottom: 8rpx;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #94a3b8;
+}
+
+/* 卡片内容 */
+.card-content {
+  margin-bottom: 30rpx;
+}
+
+.card-content .title {
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #2d2d44;
+  margin-bottom: 20rpx;
+  text-align: left;
+}
+
+.card-content .content {
+  font-size: 30rpx;
+  color: #475569;
+  line-height: 1.7;
+  margin-bottom: 24rpx;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.tag {
+  font-size: 24rpx;
+  color: #1e5f9b;
+  background: #edf5ff;
+  padding: 10rpx 22rpx;
+  border-radius: 30rpx;
+}
+
+.location {
+  font-size: 26rpx;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+/* 图片区域 */
+.card-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.card-images image {
+  width: calc(33.33% - 12rpx);
+  height: 210rpx;
+  border-radius: 20rpx;
+  background: #f8f6ff;
+  object-fit: cover;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 底部操作栏 */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 28rpx;
+  border-top: 1rpx solid #f1f5f9;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 26rpx;
+  color: #94a3b8;
+  padding: 12rpx 20rpx;
+  border-radius: 20rpx;
+  background: #f8f6ff;
+}
+
+.action-item text:first-child {
+  font-size: 30rpx;
+}
+
+.action-item .active {
+  color: #f43f5e;
+}
+
+.delete-btn {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+/* 空状态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 180rpx 40rpx;
+}
+
+.empty image {
+  width: 320rpx;
+  height: 320rpx;
+  margin-bottom: 40rpx;
+  opacity: 0.6;
+}
+
+.empty text {
+  font-size: 30rpx;
+  color: #94a3b8;
+  margin-bottom: 60rpx;
+}
+
+.publish-btn {
+  background: linear-gradient(135deg, #88b4fc 0%, #a6dffa 50%, #fa9ee0 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  padding: 26rpx 70rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 20rpx rgba(161, 196, 253, 0.25);
+}
+
+.loading {
+  text-align: center;
+  padding: 120rpx;
+  color: #94a3b8;
+  font-size: 28rpx;
+}

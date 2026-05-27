@@ -1,0 +1,82 @@
+<view class="container">
+  <!-- 顶部状态 & 搜索 -->
+  <view class="header-bg">
+    <view style="height: {{statusBarHeight}}px;"></view>
+    <view class="nav-bar">
+      <!-- 大学选择预留接口 -->
+      <view class="location" bindtap="onChangeUniversity">
+        <text>📍 {{university}}</text>
+      </view>
+      <!-- 消息键跳转预留 -->
+      <view class="msg-btn" bindtap="onGoToMessage">🔔</view>
+    </view>
+    <view class="app-title">搭子星球 ✨</view>
+    <view class="search-box">
+      <icon type="search" size="16" color="#999"></icon>
+      <input placeholder="搜索场景、标签、地点..." />
+    </view>
+  </view>
+
+  <view class="content">
+    <!-- 1. 功能板块：发搭子 & 看攻略 (2个大模块) -->
+    <view class="feature-row">
+      <view class="feature-box post-box" bindtap="onFeatureTap" data-type="post">
+        <text class="box-title">发搭子</text>
+        <text class="box-desc">寻找志同道合</text>
+        <view class="rocket">🚀</view>
+      </view>
+      <view class="feature-box guide-box" bindtap="onFeatureTap" data-type="guide">
+        <text class="box-title">看攻略</text>
+        <text class="box-desc">学长学姐经验</text>
+        <view class="book">📖</view>
+      </view>
+    </view>
+
+    <!-- 2. 场景筛选 (图一圆形排列) -->
+    <view class="category-grid">
+      <view wx:for="{{categories}}" wx:key="name" 
+            class="cat-circle-item {{selectedCat == item.name ? 'active' : ''}}" 
+            bindtap="onSelectCategory" data-name="{{item.name}}">
+        <view class="cat-icon">{{item.icon}}</view>
+        <text class="cat-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <!-- 3. 热门信息流 -->
+    <view class="section-title">
+      <text>🔥 今日热门</text>
+      <view class="more">查看全部 ></view>
+    </view>
+
+    <view class="post-list">
+      <block wx:for="{{displayPosts}}" wx:key="id">
+        <view class="post-card" bindtap="goToDetail" data-id="{{item.id}}">
+          <view class="user-info">
+            <view class="avatar" style="background-color:{{item.avatarColor}}">{{item.avatarText}}</view>
+            <view class="user-detail">
+              <view class="name-row">
+                <text class="u-name">{{item.userName}}</text>
+                <text class="u-rate">⭐{{item.rating}}</text>
+                <view class="tag-hot" wx:if="{{item.isHot}}">🔥热门</view>
+              </view>
+              <view class="u-cat-tag">📍 {{item.category}}</view>
+            </view>
+          </view>
+
+          <view class="post-body">
+            <view class="main-title">{{item.title}}</view>
+            <view class="meta-info">
+              <text>📍 {{item.location}}</text>
+              <text>🕒 {{item.time}}</text>
+              <text>👥 还差 {{item.needed}} 人</text>
+            </view>
+            <!-- 标签区：图二那种药丸状效果 -->
+            <view class="tag-group">
+              <text class="pill-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

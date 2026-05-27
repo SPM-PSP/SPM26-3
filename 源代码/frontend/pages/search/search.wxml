@@ -1,0 +1,101 @@
+<!--pages/search/search.wxml-->
+<view class="page-container">
+
+<!-- 2. 搜索栏 -->
+<view class="search-box">
+  <view class="search-inner">
+    <icon type="search" size="18" color="#7c66f5"></icon>
+    <input
+      class="search-input"
+      placeholder="搜索目的地、学校、兴趣、活动等"
+      bindinput="onSearchInput"
+      confirm-type="search"
+      bindconfirm="apiSearch"
+      value="{{searchKeyword}}"
+    />
+    <view class="search-btn" bindtap="apiSearch">搜索</view>
+  </view>
+</view>
+
+<!-- 3. 选择兴趣区 -->
+<view class="interest-wrap">
+  <view class="section-head">
+    <text class="st-title">选择兴趣</text>
+  </view>
+  <view class="interest-grid">
+    <view 
+      class="int-item {{selectedInterest == item.name ? 'active' : ''}}" 
+      wx:for="{{interests}}" 
+      wx:key="name"
+      bindtap="onSelectInterest" 
+      data-name="{{item.name}}"
+    >
+      <view class="int-icon" style="background: {{item.color}}">{{item.icon}}</view>
+      <text class="int-name">{{item.name}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- 4. 筛选 Tab -->
+<view class="filter-tabs">
+  <view class="left-tabs">
+    <view class="f-tab {{selectedTab == '智能推荐' ? 'active' : ''}}" bindtap="onSelectTab" data-name="智能推荐">智能推荐</view>
+    <view class="f-tab {{selectedTab == '最新发布' ? 'active' : ''}}" bindtap="onSelectTab" data-name="最新发布">最新发布</view>
+  </view>
+  <view class="right-tabs">
+    <view class="f-tab dropdown" bindtap="apiShowTimeMenu">时间<text class="arrow">▼</text></view>
+    <view class="f-tab dropdown" bindtap="apiShowHotMenu">热度<text class="arrow">▼</text></view>
+  </view>
+</view>
+
+<!-- 5. 数据概览 -->
+<view class="stats-bar">
+  <view class="stats-left">共找到 <text class="purple-num">{{displayPosts.length}}</text> 个相关帖子 ✨</view>
+  <view class="stats-right" bindtap="apiRefresh">🔄 刷新</view>
+</view>
+
+<!-- 6. 帖子卡片流 -->
+<view class="card-list">
+  <block wx:for="{{displayPosts}}" wx:key="id">
+    <view class="p-card" bindtap="apiGoToDetail" data-id="{{item.id}}">
+      <!-- <view class="card-deco">{{item.decoration}}</view> -->
+      
+      <view class="card-header">
+        <image class="u-avatar-img" src="{{item.userAvatar}}" mode="aspectFill"></image>
+        <view class="u-meta">
+          <view class="u-top-row">
+            <text class="u-name">{{item.userName}}</text>
+            <text class="u-sex">{{item.gender == 'male' ? '♂' : '♀'}}</text>
+          </view>
+          <view class="u-sub">
+            <text>{{item.grade}}</text>
+            <text>{{item.college}}</text>
+          </view>
+        </view>
+        <view class="c-tag">{{item.category}}</view>
+      </view>
+
+      <view class="card-body">
+        <view class="p-title">{{item.title}}</view>
+        <view class="p-desc">{{item.desc}}</view>
+        
+        <!-- [新增] 帖子配图展示 -->
+        <view class="p-image-wrap" wx:if="{{item.postImage}}">
+          <image class="p-main-image" src="{{item.postImage}}" mode="aspectFill"></image>
+        </view>
+
+        <view class="p-pills">
+          <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+        </view>
+      </view>
+
+      <view class="card-footer">
+        <view class="f-item">📍 {{item.location}}</view>
+        <view class="f-item">🕒 {{item.time}}</view>
+        <view class="f-remain">还差 <text class="red-num">{{item.needed}}</text> 人</view>
+      </view>
+    </view>
+  </block>
+  <view class="no-more">没有更多啦~</view>
+</view>
+</view>

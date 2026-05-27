@@ -1,0 +1,114 @@
+<view class="page-wrap">
+  <view class="user-info"
+  bindtap="goOtherProfile"
+  data-user-id="{{detail.authorId}}"
+  >
+    <image
+      wx:if="{{detail.author.avatarUrl}}"
+      class="avatar-img"
+      src="{{detail.author.avatarUrl}}"
+      mode="aspectFill"
+    />
+    <view wx:else class="avatar">{{detail.author.nickname.slice(0,1)}}</view>
+
+    <view class="user-right">
+      <text class="nickname">{{detail.author.nickname}}</text>
+      <text class="publish-time">{{detail.createdAtText}}</text>
+    </view>
+  </view>
+
+  <view class="moment-title" wx:if="{{detail.title}}">
+    {{detail.title}}
+  </view>
+
+  <view class="moment-content">
+    {{detail.content}}
+  </view>
+
+  <view class="moment-img-grid" wx:if="{{detail.media && detail.media.length > 0}}">
+    <view class="grid-item" wx:for="{{detail.media}}" wx:key="id">
+      <image
+        wx:if="{{item.mediaType === 0}}"
+        src="{{item.mediaUrl}}"
+        mode="aspectFill"
+        bindtap="previewImage"
+        data-url="{{item.mediaUrl}}"
+      />
+      <video
+        wx:else
+        src="{{item.mediaUrl}}"
+        controls
+      ></video>
+    </view>
+  </view>
+
+  <view class="moment-tag-location" wx:if="{{detail.tags.length > 0 || detail.location}}">
+    <view class="tag-item" wx:for="{{detail.tags}}" wx:key="*this">{{item}}</view>
+    <text class="location-txt" wx:if="{{detail.location}}">📍 {{detail.location}}</text>
+  </view>
+
+  <view class="tool-bar">
+  <view class="tool-item" bindtap="toggleLike">
+    <image
+      class="tool-icon"
+      src="{{detail.isLiked ? icons.liked : icons.like}}"
+      mode="aspectFit"
+    />
+    <text class="num">{{detail.likeCount}}</text>
+  </view>
+
+  <view class="tool-item" bindtap="toggleFavorite">
+    <image
+      class="tool-icon"
+      src="{{detail.isFavorited ? icons.favorited : icons.favorite}}"
+      mode="aspectFit"
+    />
+    <text class="num">{{detail.favoriteCount}}</text>
+  </view>
+
+  <view class="tool-item">
+    <image
+      class="tool-icon"
+      src="{{icons.comment}}"
+      mode="aspectFit"
+    />
+    <text class="num">{{detail.commentCount}}</text>
+  </view>
+</view>
+
+  <view class="line"></view>
+
+  <view class="comment-wrap">
+    <view class="comment-title">全部评论（{{detail.commentCount}}）</view>
+
+    <view class="comment-item" wx:for="{{commentList}}" wx:key="id">
+      <image
+        wx:if="{{item.user.avatarUrl}}"
+        class="comment-avatar"
+        src="{{item.user.avatarUrl}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="comment-avatar">{{item.user.initial}}</view>
+
+      <view class="comment-right">
+        <text class="cmt-name">{{item.user.nickname}}</text>
+        <text class="cmt-content">{{item.content}}</text>
+        <text class="cmt-time">{{item.createdAtText}}</text>
+      </view>
+    </view>
+
+    <view class="empty-comment" wx:if="{{commentList.length === 0}}">
+      暂无评论，快来抢沙发～
+    </view>
+  </view>
+
+  <view class="input-fixed-bar">
+    <input
+      class="cmt-input"
+      placeholder="写下你的评论..."
+      value="{{comment}}"
+      bindinput="setComment"
+    />
+    <view class="send-btn" bindtap="sendComment">发送</view>
+  </view>
+</view>

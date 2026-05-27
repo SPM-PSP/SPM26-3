@@ -1,0 +1,56 @@
+<view class="group-detail-page">
+  <view class="group-card">
+
+<view class="group-name-row">
+
+  <view class="group-name">
+    {{groupInfo.name || '群聊详情'}}
+  </view>
+
+  <view
+    wx:if="{{isOwner}}"
+    class="edit-name-btn"
+    bindtap="editGroupName"
+  >
+    修改
+  </view>
+
+</view>
+
+<text class="group-count">
+  {{groupMembers.length}} 位成员
+</text>
+
+</view>
+
+  <view class="member-section">
+    <text class="section-title">群成员</text>
+
+    <view class="member-grid">
+      <view
+        class="member-item"
+        wx:for="{{groupMembers}}"
+        wx:key="userId"
+      >
+        <image
+          wx:if="{{item.avatarUrl}}"
+          class="member-avatar"
+          src="{{item.avatarUrl}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="member-avatar avatar-fallback">
+          {{item.nickname[0] || '用'}}
+        </view>
+
+        <text class="member-name">{{item.nickname}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view
+  class="quit-btn"
+  bindtap="handleGroupAction"
+>
+  {{groupInfo.ownerId == currentUserId ? '解散群聊' : '退出群聊'}}
+</view>
+</view>

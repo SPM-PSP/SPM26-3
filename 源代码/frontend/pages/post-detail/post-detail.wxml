@@ -1,0 +1,80 @@
+<view class="detail-page" bindtap="goBack">
+  <view class="detail-card" catchtap="stopBubbling">
+    <view class="handle-bar" bindtap="goBack"></view>
+
+    <!-- 顶部用户信息 -->
+    <view class="user-header">
+      <image class="avatar-img" src="{{postInfo.userAvatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-meta">
+        <view class="name-line">
+          <text class="nickname">{{postInfo.userName}}</text>
+          <view wx:if="{{postInfo.isCertified}}" class="cert-tag">✓ 已认证</view>
+        </view>
+        <view class="credit-line">
+          <text class="star">⭐</text>
+          <text class="credit-num">{{postInfo.creditScore}}</text>
+          <text class="credit-label">信用分</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 详情内容 -->
+    <view class="content-box">
+      <view class="title">{{postInfo.title}}</view>
+      
+      <view class="tags-row">
+        <text class="tag-pill" wx:for="{{postInfo.tags}}" wx:key="*this"># {{item}}</text>
+      </view>
+
+      <view class="info-panel">
+        <view class="info-item">
+          <text class="emoji">📍</text><text>{{postInfo.location}}</text>
+        </view>
+        <view class="info-item">
+          <text class="emoji">⏱️</text><text>{{postInfo.time}}</text>
+        </view>
+        <view class="info-item">
+          <text class="emoji">👥</text><text>已招 {{postInfo.participants}} 人</text>
+        </view>
+      </view>
+
+      <!-- 新增：图片展示区域 -->
+      <view class="image-gallery" wx:if="{{postInfo.imageUrls.length > 0 || postInfo.coverImage}}">
+        <swiper class="detail-swiper" indicator-dots="{{postInfo.imageUrls.length > 1}}" circular autoplay interval="4000">
+          <swiper-item wx:for="{{postInfo.imageUrls.length > 0 ? postInfo.imageUrls : [postInfo.coverImage]}}" wx:key="*this">
+            <image 
+              class="swiper-img" 
+              src="{{item}}" 
+              mode="aspectFill" 
+              bindtap="previewImage" 
+              data-src="{{item}}"
+            ></image>
+          </swiper-item>
+        </swiper>
+      </view>
+
+      <view class="description-section">
+        <view class="section-title">详细说明</view>
+        <text class="description-text">{{postInfo.desc}}</text>
+      </view>
+    </view>
+
+    <!-- 底部按钮区 -->
+    <view class="action-footer">
+      <block wx:if="{{isMine}}">
+        <view class="admin-btn-group">
+          <button class="btn view-btn" bindtap="handleViewApplications">查看申请</button>
+          <button class="btn edit-btn" bindtap="handleEnterChat">进入群聊</button>
+        </view>
+      </block>
+      <block wx:else>
+        <button wx:if="{{isJoined}}" class="btn chat-btn" bindtap="handleEnterChat">💬 进入群聊</button>
+        <button wx:elif="{{hasApplied}}" class="btn applied-btn" disabled>已申请，等待审核</button>
+        <block wx:else>
+          <button class="btn apply-btn" bindtap="handleApply">💫 申请加入</button>
+          <view class="no-join" bindtap="goBack">暂不参加</view>
+        </block>
+      </block>
+    </view>
+  </view>
+</view>

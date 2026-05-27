@@ -1,0 +1,96 @@
+<!-- pages/home/home.wxml -->
+<view class="home-root">
+  <!-- 1. 顶部渐变 Header -->
+  <view class="header-banner" style="padding-top: {{statusBarHeight}}px;">
+    <view class="header-top">
+      <view class="header-left">
+        <view class="location-row">
+          <text class="pin">📍</text>
+          <text>上海交通大学</text>
+        </view>
+        <view class="app-title-row">
+          <text>搭子星球</text>
+          <text class="sparkle">✨</text>
+        </view>
+      </view>
+      <view class="bell-btn" bindtap="onGoToNotice">
+        <text class="bell-icon">🔔</text>
+        <view class="unread-dot"></view>
+      </view>
+    </view>
+    <view class="search-wrap">
+      <view class="search-bar">
+        <icon type="search" size="14" color="rgba(255,255,255,0.7)"></icon>
+        <input placeholder="搜索目的地、兴趣、搭子..." placeholder-class="ph-style" />
+      </view>
+    </view>
+  </view>
+
+  <view class="main-content">
+    <!-- 2. 精选攻略 Swiper -->
+    <view class="section-head">
+      <text class="icon">✨</text>
+      <text class="title">精选攻略</text>
+    </view>
+    
+    <swiper class="guide-swiper" indicator-dots="{{true}}" indicator-active-color="#7c66f5" previous-margin="30rpx" next-margin="30rpx" circular="{{true}}">
+      <swiper-item wx:for="{{hotGuides}}" wx:key="id">
+        <view class="guide-card" bindtap="onGoToGuide" data-id="{{item.id}}" style="background: {{item.bgColor}}">
+          <view class="g-info">
+            <text class="g-title">{{item.title}}</text>
+            <text class="g-tag"># {{item.tag}}</text>
+          </view>
+          <text class="g-emoji">{{item.emoji}}</text>
+        </view>
+      </swiper-item>
+    </swiper>
+
+    <!-- 3. 活动广场 -->
+    <view class="square-banner" bindtap="onGoToSquare">
+      <view class="square-left">
+        <view class="sq-title">🎡 活动广场</view>
+        <view class="sq-desc">看看校友们的精彩瞬间</view>
+      </view>
+      <view class="sq-btn">去逛逛</view>
+    </view>
+
+    <!-- 4. 帖子列表 -->
+    <view class="section-head hot-head">
+      <text class="icon">🔥</text>
+      <text class="title">今日热门</text>
+    </view>
+
+    <view class="post-list">
+      <block wx:for="{{displayPosts}}" wx:key="id">
+        <view class="post-card" bindtap="onGoToDetail" data-id="{{item.id}}">
+          <view class="u-row">
+            <image class="u-avatar-img" src="{{item.userAvatar}}" mode="aspectFill"></image>
+            <view class="u-meta">
+              <view class="name-line">
+                <text class="u-name">{{item.userName}}</text>
+              </view>
+              <view class="u-tag"># {{item.category}}</view>
+            </view>
+          </view>
+          
+          <view class="p-title">{{item.title}}</view>
+
+          <!-- [新增] 帖子配图展示 -->
+          <view class="p-image-wrap" wx:if="{{item.postImage}}">
+            <image class="p-main-image" src="{{item.postImage}}" mode="aspectFill"></image>
+          </view>
+          
+          <view class="p-details">
+            <view>📍 {{item.location}}</view>
+            <view>🕒 {{item.time}}</view>
+            <view>👥 还差 <text class="needed-num">{{item.needed}}</text> 人</view>
+          </view>
+          
+          <view class="p-labels">
+            <text class="pill" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

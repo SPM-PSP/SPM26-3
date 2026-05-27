@@ -1,0 +1,140 @@
+<view class="page">
+  <view class="header">
+    <view class="header-bg"></view>
+
+    <view class="user-info">
+      <image
+        wx:if="{{userInfo.avatarUrl}}"
+        class="avatar"
+        src="{{userInfo.avatarUrl}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="avatar avatar-fallback">
+        {{userInfo.nickname[0] || '用'}}
+      </view>
+
+      <view class="name-wrap">
+        <view class="name-row">
+          <text class="nickname">{{userInfo.nickname}}</text>
+          <text class="verify-badge" wx:if="{{userInfo.verifyStatus === 2}}">已认证</text>
+        </view>
+
+        <text class="bio">{{userInfo.bio || '这个人还没有填写简介'}}</text>
+      </view>
+    </view>
+
+    <view class="follow-btn {{userInfo.isFollow ? 'followed' : ''}}" bindtap="toggleFollow">
+      {{userInfo.isFollow ? '已关注' : '关注'}}
+    </view>
+  </view>
+
+  <view class="stats-card">
+    <view class="stat-item">
+      <text class="stat-num">{{userInfo.followerCount}}</text>
+      <text class="stat-label">粉丝</text>
+    </view>
+
+    <view class="stat-line"></view>
+
+    <view class="stat-item">
+      <text class="stat-num">{{userInfo.followingCount}}</text>
+      <text class="stat-label">关注</text>
+    </view>
+  </view>
+
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">学校</text>
+      <text class="info-value">{{userInfo.school || '未填写'}}</text>
+    </view>
+
+    <view class="info-row">
+      <text class="info-label">年级</text>
+      <text class="info-value">{{userInfo.grade || '未填写'}}</text>
+    </view>
+
+    <view class="info-row">
+      <text class="info-label">性别</text>
+      <text class="info-value">{{userInfo.gender === 1 ? '男' : (userInfo.gender === 2 ? '女' : '未知')}}</text>
+    </view>
+  </view>
+
+  <view class="tag-card">
+    <text class="section-title">兴趣标签</text>
+
+    <view class="tag-list" wx:if="{{userInfo.interestTags.length > 0}}">
+      <view
+        class="tag-item"
+        wx:for="{{userInfo.interestTags}}"
+        wx:key="*this"
+      >
+        {{item}}
+      </view>
+    </view>
+
+    <view class="empty-tip" wx:else>
+      暂无兴趣标签
+    </view>
+  </view>
+  <view class="tab-bar">
+  <view
+    class="tab-item {{tabIndex === 0 ? 'active' : ''}}"
+    bindtap="switchTab"
+    data-index="0"
+  >
+    动态帖
+  </view>
+  <view
+    class="tab-item {{tabIndex === 1 ? 'active' : ''}}"
+    bindtap="switchTab"
+    data-index="1"
+  >
+    搭子帖
+  </view>
+</view>
+
+<view class="list-container" wx:if="{{tabIndex === 0}}">
+  <block wx:if="{{momentList.length > 0}}">
+    <view
+      class="post-card"
+      wx:for="{{momentList}}"
+      wx:key="id"
+      bindtap="goMomentDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="card-title">{{item.title}}</view>
+      <view class="card-desc">{{item.content}}</view>
+      <view class="card-footer">
+        <text>{{item.location || '未填写地点'}}</text>
+        <text>{{item.createdAt ? item.createdAt.slice(0, 10) : ''}}</text>
+      </view>
+    </view>
+  </block>
+  <view wx:else class="empty-tip">暂无发布的动态帖</view>
+</view>
+
+<view class="list-container" wx:if="{{tabIndex === 1}}">
+  <block wx:if="{{palList.length > 0}}">
+    <view
+      class="post-card"
+      wx:for="{{palList}}"
+      wx:key="id"
+      bindtap="goPalDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="card-top">
+        <view class="tag">{{item.scene}}</view>
+        <view class="status">{{item.status === 0 ? '招募中' : '已结束'}}</view>
+      </view>
+      <view class="card-title">{{item.title}}</view>
+      <view class="card-desc">{{item.content}}</view>
+      <view class="card-footer">
+        <text>{{item.location || '未填写地点'}}</text>
+        <text>{{item.startTime ? item.startTime.slice(0, 10) : ''}}</text>
+      </view>
+    </view>
+  </block>
+  <view wx:else class="empty-tip">暂无发布的搭子帖</view>
+</view>
+
+</view>

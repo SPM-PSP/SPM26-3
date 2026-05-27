@@ -1,0 +1,132 @@
+page {
+  background-color: #F8F9FF;
+}
+
+.group-detail-page {
+  min-height: 100vh;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+.group-card {
+  background-color: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 28rpx;
+}
+
+.group-name {
+  flex: 1;
+
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111827;
+
+  line-height: 44rpx;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.group-count {
+  font-size: 26rpx;
+  color: #9CA3AF;
+}
+
+.member-section {
+  background-color: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 24rpx;
+}
+
+.member-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28rpx 22rpx;
+}
+
+.member-item {
+  width: 120rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.member-avatar {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  background-color: #E5E7EB;
+  margin-bottom: 12rpx;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #EC4899;
+  font-size: 28rpx;
+}
+
+.member-name {
+  width: 120rpx;
+  font-size: 24rpx;
+  color: #374151;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quit-btn {
+  margin-top: 40rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background-color: #fff;
+  color: #EF4444;
+  font-size: 30rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.group-name-row {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.edit-name-btn {
+  height: 44rpx;
+
+  padding: 0 18rpx;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 999rpx;
+
+  background: #eef4ff;
+
+  color: #5b7fff;
+
+  font-size: 22rpx;
+}

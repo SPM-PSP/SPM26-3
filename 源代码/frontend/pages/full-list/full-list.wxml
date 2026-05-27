@@ -1,0 +1,135 @@
+<view class="full-list-page">
+  <!-- 导航栏 -->
+  <view class="nav-header">
+    <view class="back-btn" bindtap="goBack">
+      <text>←</text>
+    </view>
+    <view class="title">{{title}}</view>
+  </view>
+
+  <!-- 列表 -->
+  <view class="list-container" wx:if="{{!loading && list.length > 0}}">
+    <block wx:for="{{list}}" wx:key="id">
+      <view class="post-card" data-id="{{item.id}}" bindtap="goPostDetail">
+        <!-- 卡片头部 -->
+        <view class="card-top">
+          <view class="tag {{item.scene === 'travel' ? 'travel' : (item.scene === 'eat' ? 'eat' : 'sport')}}">
+            {{item.scene === 'travel' ? '✈️ 旅行' : (item.scene === 'eat' ? '🍚 干饭' : '🏃 运动')}}
+          </view>
+          
+          <!-- 状态标签 -->
+          <view wx:if="{{type === 'publish'}}" class="status {{item.status === 0 ? 'recruiting' : (item.status === 1 ? 'full' : (item.status === 2 ? 'ended' : 'cancelled'))}}">
+            <text wx:if="{{item.status === 0}}">招募中</text>
+            <text wx:elif="{{item.status === 1}}">已满员</text>
+            <text wx:elif="{{item.status === 2}}">已结束</text>
+            <text wx:elif="{{item.status === 3}}">已取消</text>
+          </view>
+          
+          <view wx:elif="{{type === 'apply'}}" class="status {{item.applicationStatus === 0 ? 'pending' : (item.applicationStatus === 1 ? 'approved' : 'rejected')}}">
+            <text wx:if="{{item.applicationStatus === 0}}">待审核</text>
+            <text wx:elif="{{item.applicationStatus === 1}}">已通过</text>
+            <text wx:elif="{{item.applicationStatus === 2}}">已拒绝</text>
+            <text wx:elif="{{item.applicationStatus === 3}}">已取消</text>
+          </view>
+          
+          <view wx:elif="{{type === 'success'}}" class="status success">已成功</view>
+        </view>
+        
+        <!-- 标题 -->
+        <view class="card-title">{{item.title}}</view>
+        
+        <!-- 内容 -->
+        <view class="card-content">{{item.content}}</view>
+        
+        <!-- 底部信息 -->
+        <view class="card-footer">
+          <view class="location">📍 {{item.location || '未知地点'}}</view>
+          <view class="time">⏱️ {{item.startTime ? item.startTime.slice(0,10) : '待定'}}</view>
+          <view class="count">👥 {{item.currentCount || 0}}/{{item.expectedCount}}人</view>
+        </view>
+
+ 
+        <view class="card-actions" wx:if="{{type === 'publish'}}">
+        <!-- 申请列表按钮（带红点） -->
+        <view class="action-btn" data-id="{{item.id}}" catchtap="toggleApplications">
+          <text>📋 申请列表</text>
+          <text wx:if="{{item.pendingCount > 0}}" class="red-dot">
+            {{item.pendingCount}}
+          </text>
+        </view>
+        <view class="action-btn edit-btn" data-id="{{item.id}}" catchtap="editPublishPost">
+          <text>✏️ 编辑</text>
+        </view>
+        <view class="action-btn finish-btn" data-id="{{item.id}}" catchtap="finishPublishPost" wx:if="{{item.status === 0}}">
+          <text>✅ 结束</text>
+        </view>
+        <view class="action-btn delete-btn" data-id="{{item.id}}" catchtap="deletePublishPost">
+          <text>🗑️ 删除</text>
+        </view>
+      </view>
+      
+      <!-- 展开的申请列表 -->
+      <view class="applications-section" wx:if="{{expandedPostId === item.id}}">
+        <!-- 加载中 -->
+        <view class="apps-loading" wx:if="{{loadingApps}}">
+          <text>加载中...</text>
+        </view>
+        
+        <!-- 申请列表内容 -->
+        <block wx:elif="{{applicationsMap[item.id] && applicationsMap[item.id].length > 0}}">
+          <!-- 统计栏 - 直接使用预处理的 stats -->
+          <view class="apps-stats">
+            <view class="stat">总数: {{applicationsStats[item.id].total}}</view>
+            <view class="stat pending">待审核: {{applicationsStats[item.id].pending}}</view>
+            <view class="stat approved">已通过: {{applicationsStats[item.id].approved}}</view>
+            <view class="stat rejected">已拒绝: {{applicationsStats[item.id].rejected}}</view>
+          </view>
+          
+          <!-- 申请条目 -->
+          <view class="application-item" wx:for="{{applicationsMap[item.id]}}" wx:for-item="app" wx:key="id">
+            <view class="app-info" bindtap="viewApplicantProfile" data-id="{{app.applicantId}}">
+              <image class="app-avatar" src="{{app.applicantAvatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+              <view class="app-detail">
+                <view class="app-name">{{app.applicantName || '用户' + app.applicantId}}</view>
+                <view class="app-time">{{app.createdAt}}</view>
+              </view>
+              <view class="app-status {{app.status === 0 ? 'pending' : (app.status === 1 ? 'approved' : 'rejected')}}">
+                <text wx:if="{{app.status === 0}}">待审核</text>
+                <text wx:elif="{{app.status === 1}}">已通过</text>
+                <text wx:elif="{{app.status === 2}}">已拒绝</text>
+              </view>
+            </view>
+            
+            <view class="app-message">
+              <text class="message-label">留言：</text>
+              <text class="message-content">{{app.message || '无留言'}}</text>
+            </view>
+            
+            <!-- 操作按钮（仅待审核显示） -->
+            <view class="app-actions" wx:if="{{app.status === 0}}">
+              <view class="app-btn reject" catchtap="reviewApplication" data-post-id="{{item.id}}" data-app-id="{{app.id}}" data-status="2">
+                拒绝
+              </view>
+              <view class="app-btn approve" catchtap="reviewApplication" data-post-id="{{item.id}}" data-app-id="{{app.id}}" data-status="1">
+                通过
+              </view>
+            </view>
+          </view>
+        </block>
+        
+        <!-- 空状态 -->
+        <view class="apps-empty" wx:elif="{{!loadingApps}}">
+          <text>暂无申请</text>
+        </view>
+      </view>
+
+      </view>
+    </block>
+    
+    <view class="load-more" wx:if="{{hasMore}}">加载更多...</view>
+    <view class="no-more" wx:elif="{{list.length > 0}}">没有更多了</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+</view>

@@ -1,0 +1,218 @@
+/* pages/my-moments-list/my-moments-list.wxss */
+
+page {
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+/* 页面 */
+.my-moments-page {
+  min-height: 100vh;
+  background: #f5f6fa;
+
+  padding-top: 180rpx;
+
+  box-sizing: border-box;
+}
+
+/* 顶部导航 */
+.nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 88rpx;
+
+  padding: 88rpx 24rpx 0;
+
+  background: rgba(255,255,255,0.96);
+
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1rpx solid #f0f0f0;
+
+  z-index: 999;
+
+  backdrop-filter: blur(20rpx);
+}
+
+/* 返回按钮 */
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+
+  border-radius: 18rpx;
+
+  background: #f3f4f7;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 34rpx;
+  color: #222;
+
+  flex-shrink: 0;
+}
+
+/* 标题 */
+.title {
+  flex: 1;
+
+  text-align: center;
+
+  font-size: 36rpx;
+  font-weight: 700;
+
+  color: #111;
+
+  margin-right: 60rpx;
+}
+
+/* 列表 */
+.list-container {
+  padding: 16rpx 24rpx 24rpx;
+  box-sizing: border-box;
+}
+
+/* 卡片通用 */
+.moment-card,
+.comment-card {
+  background: #fff;
+
+  border-radius: 28rpx;
+
+  padding: 28rpx;
+
+  margin-bottom: 24rpx;
+
+  box-shadow:
+    0 8rpx 24rpx rgba(0,0,0,0.04);
+}
+
+/* 卡片头部 */
+.card-header {
+  margin-bottom: 20rpx;
+}
+
+/* 作者信息 */
+.author-info {
+  display: flex;
+  align-items: center;
+}
+
+/* 头像 */
+.avatar {
+  width: 72rpx;
+  height: 72rpx;
+
+  border-radius: 50%;
+
+  margin-right: 18rpx;
+
+  background: #eee;
+
+  flex-shrink: 0;
+}
+
+/* 作者名 */
+.author-name {
+  font-size: 30rpx;
+  font-weight: 700;
+
+  color: #222;
+}
+
+/* 动态标题 */
+.moment-title {
+  font-size: 34rpx;
+  font-weight: 700;
+
+  color: #222;
+
+  line-height: 1.5;
+
+  margin-bottom: 18rpx;
+
+  word-break: break-word;
+}
+
+/* 动态统计 */
+.moment-stats {
+  font-size: 24rpx;
+  color: #9aa1af;
+}
+
+/* 评论内容 */
+.comment-content {
+  font-size: 30rpx;
+
+  color: #333;
+
+  line-height: 1.7;
+
+  margin-bottom: 20rpx;
+
+  word-break: break-word;
+}
+
+/* 评论底部 */
+.comment-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 24rpx;
+}
+
+/* 动态标题蓝色 */
+.comment-footer .moment-title {
+  margin-bottom: 0;
+
+  font-size: 26rpx;
+  font-weight: 600;
+
+  color: #5b7fff;
+}
+
+/* 时间 */
+.comment-time {
+  color: #a0a7b5;
+}
+
+/* 加载 */
+.loading {
+  padding-top: 240rpx;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 空状态 */
+.empty {
+  padding-top: 260rpx;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty image {
+  width: 280rpx;
+  height: 280rpx;
+
+  opacity: 0.9;
+
+  margin-bottom: 24rpx;
+}
+
+.empty text {
+  font-size: 28rpx;
+  color: #999;
+}

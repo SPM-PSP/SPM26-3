@@ -1,0 +1,226 @@
+page {
+  background: rgba(0,0,0,0.5); /* 遮罩色加深 */
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+}
+
+.detail-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+}
+
+.detail-card {
+  background: #fff;
+  border-radius: 60rpx 60rpx 0 0;
+  padding: 40rpx 50rpx 60rpx;
+  min-height: 75vh;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.handle-bar {
+  width: 80rpx;
+  height: 8rpx;
+  background: #f1f5f9;
+  border-radius: 4rpx;
+  margin: 0 auto 40rpx;
+}
+
+/* 用户信息 */
+.user-header { display: flex; align-items: center; margin-bottom: 30rpx; }
+.avatar { width: 110rpx; height: 110rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 40rpx; font-weight: bold; margin-right: 25rpx; }
+.purple-bg { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+.orange-bg { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.blue-bg { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+
+.nickname { font-size: 34rpx; font-weight: bold; color: #1e293b; margin-right: 15rpx; }
+.cert-tag { background: #f0f4ff; color: #6366f1; font-size: 20rpx; padding: 4rpx 12rpx; border-radius: 8rpx; font-weight: bold; }
+.credit-line { display: flex; align-items: center; margin-top: 8rpx; }
+.credit-num { font-size: 26rpx; color: #fbbf24; font-weight: bold; margin: 0 6rpx; }
+.credit-label { font-size: 24rpx; color: #94a3b8; }
+
+/* 内容区 */
+.title { font-size: 40rpx; font-weight: 800; color: #0f172a; margin-bottom: 20rpx; }
+.tags-row { display: flex; flex-wrap: wrap; gap: 12rpx; margin-bottom: 30rpx; }
+.tag-pill { background: #f1f5f9; color: #6366f1; font-size: 22rpx; padding: 6rpx 20rpx; border-radius: 30rpx; }
+
+.info-panel { background: #f8fafc; border-radius: 32rpx; padding: 25rpx 30rpx; margin-bottom: 40rpx; }
+.info-item { display: flex; align-items: center; margin-bottom: 15rpx; color: #64748b; font-size: 28rpx; }
+.info-item:last-child { margin-bottom: 0; }
+.emoji { margin-right: 15rpx; }
+
+.description-section { margin-bottom: 40rpx; }
+.section-title { font-size: 28rpx; font-weight: bold; color: #1e293b; margin-bottom: 15rpx; border-left: 8rpx solid #7c3aed; padding-left: 15rpx; }
+.description-text { font-size: 28rpx; color: #475569; line-height: 1.6; white-space: pre-wrap; }
+
+/* ======================
+   底部操作区
+====================== */
+.action-footer {
+  margin-top: auto;
+  padding-top: 30rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 通用按钮 */
+.btn {
+  height: 96rpx;
+  border-radius: 48rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+}
+
+/* 清除微信 button 默认边框 */
+.btn::after {
+  border: none;
+}
+
+/* ======================
+   普通用户按钮
+====================== */
+
+/* 申请加入 */
+.apply-btn {
+  width: 100%;
+  color: #fff;
+
+  background: linear-gradient(
+    135deg,
+    #8b5cf6 0%,
+    #7c3aed 50%,
+    #f59e0b 100%
+  );
+
+  box-shadow: 0 12rpx 30rpx rgba(124, 58, 237, 0.18);
+}
+
+/* 进入群聊 */
+.chat-btn {
+  width: 100%;
+  color: #fff;
+
+  background: linear-gradient(
+    135deg,
+    #10b981 0%,
+    #34d399 100%
+  );
+
+  box-shadow: 0 12rpx 30rpx rgba(16, 185, 129, 0.18);
+}
+
+/* ======================
+   自己帖子按钮组
+====================== */
+
+.admin-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+/* 查看申请 */
+.view-btn {
+  flex: 1;
+
+  background: linear-gradient(
+    135deg,
+    #8b5cf6 0%,
+    #7c3aed 100%
+  );
+
+  color: #fff;
+
+  box-shadow: 0 10rpx 24rpx rgba(124, 58, 237, 0.15);
+}
+
+/* 进入群聊（自己的帖子） */
+.edit-btn {
+  flex: 1;
+
+  background: linear-gradient(
+    135deg,
+    #10b981 0%,
+    #34d399 100%
+  );
+
+  color: #fff;
+
+  box-shadow: 0 10rpx 24rpx rgba(16, 185, 129, 0.15);
+}
+
+/* ======================
+   暂不参加
+====================== */
+
+.no-join {
+  margin-top: 26rpx;
+
+  text-align: center;
+
+  color: #94a3b8;
+  font-size: 26rpx;
+}
+
+.avatar-img {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%; /* 变成圆形 */
+  margin-right: 25rpx;
+  border: 4rpx solid #fff;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+
+.applied-btn {
+  background: #cbd5e1 !important;
+  color: #fff !important;
+}
+
+/* ... 前面原有样式保持不变 ... */
+
+/* 图片轮播区样式 */
+.image-gallery {
+  width: 100%;
+  margin-bottom: 40rpx;
+  border-radius: 32rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.05);
+}
+
+.detail-swiper {
+  height: 450rpx; /* 轮播高度 */
+  width: 100%;
+}
+
+.swiper-img {
+  width: 100%;
+  height: 100%;
+  background-color: #f1f5f9;
+}
+
+/* 指示点颜色调整 */
+.wx-swiper-dot {
+  width: 12rpx;
+  height: 12rpx;
+  background: rgba(255,255,255,0.6) !important;
+}
+.wx-swiper-dot-active {
+  width: 30rpx;
+  border-radius: 6rpx;
+  background: #ffffff !important;
+}
+
+/* ... 后面原有样式保持不变 ... */

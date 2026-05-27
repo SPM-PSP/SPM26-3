@@ -1,0 +1,687 @@
+/* 核心修复：页面允许滚动 */
+page {
+  margin: 0;
+  padding: 0;
+  background: #f8f6ff;
+  height: auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 最外层容器：自动高度 + 允许内容滚动 */
+.page {
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 40rpx; /* 底部留白 */
+}
+
+/* 顶部渐变用户信息 */
+.header {
+  position: relative;
+  padding: 60rpx 40rpx 30rpx;
+  border-radius: 0 0 60rpx 60rpx;
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #fbc2eb 100%);
+  margin-bottom: 20rpx;
+}
+
+.header-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+  margin-right: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.info-right {
+  flex: 1;
+}
+
+.name-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12rpx;
+}
+
+.nickname {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-right: 15rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+.edit-icon {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.2);
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 兴趣标签 */
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.tag {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  font-size: 22rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 30rpx;
+}
+
+/* 个人简介 */
+.bio {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 关注数据行 */
+.stats-wrap {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30rpx;
+  padding-top: 25rpx;
+  position: relative;
+  z-index: 1;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-num {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.stat-divider {
+  width: 1rpx;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 快捷功能入口 */
+.quick-actions {
+  display: flex;
+  justify-content: space-around;
+  background: #fff;
+  border-radius: 30rpx;
+  margin: 0 30rpx 40rpx;
+  padding: 40rpx 0;
+  box-shadow: 0 6rpx 20rpx rgba(0,0,0,0.05);
+}
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon {
+  font-size: 44rpx;
+  margin-bottom: 15rpx;
+}
+.action-item text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* Tab 栏 */
+.tab-bar {
+  display: flex;
+  background: #fff;
+  border-radius: 30rpx;
+  margin: 0 30rpx 30rpx;
+  padding: 10rpx;
+  box-shadow: 0 6rpx 20rpx rgba(0,0,0,0.05);
+}
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 28rpx;
+  color: #888;
+  border-radius: 25rpx;
+  transition: all 0.2s;
+}
+.tab-item.active {
+  background: linear-gradient(135deg, #a1c4fd, #fbc2eb);
+  color: #fff;
+  font-weight: bold;
+}
+
+/* 列表容器 */
+.list-container {
+  margin: 0 30rpx 40rpx;
+}
+
+/* 卡片样式 - 美化升级 */
+.post-card {
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(161, 196, 253, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 卡片顶部渐变装饰条（统一主题） */
+.post-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8rpx;
+  background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 50%, #fbc2eb 100%);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.tag {
+  padding: 10rpx 22rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  background: #edf5ff;
+  color: #1e5f9b;
+  font-weight: 500;
+}
+
+/* 帖子状态标签 */
+.status {
+  font-size: 24rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 30rpx;
+}
+
+/* 招募中 */
+.status.recruiting {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+/* 已满员 */
+.status.full {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+/* 已结束 */
+.status.ended {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+/* 已取消 */
+.status.cancelled {
+  background: #f5f5f5;
+  color: #999;
+}
+
+/* 申请状态标签 - 用于我申请的列表 */
+.apply-status-tag {
+  font-size: 24rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 30rpx;
+}
+
+/* 审核中 */
+.apply-status-tag.pending {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+/* 已通过 */
+.apply-status-tag.approved {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+/* 已拒绝 */
+.apply-status-tag.rejected {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+/* 已取消 */
+.apply-status-tag.canceled {
+  background: #f5f5f5;
+  color: #999;
+}
+.card-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #2d2d44;
+  margin-bottom: 24rpx;
+  line-height: 1.5;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+  font-size: 26rpx;
+  margin-bottom: 24rpx;
+}
+
+/* 操作按钮区域 - 美化升级 */
+.card-actions {
+  display: flex;
+  border-top: 1rpx solid #f1f5f9;
+  margin-top: 16rpx;
+  background: #f8f6ff;
+  border-radius: 0 0 24rpx 24rpx;
+  overflow: hidden;
+}
+
+.action-btn {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 28rpx;
+  color: #64748b;
+  position: relative;
+  font-weight: 500;
+}
+
+.action-btn:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rpx;
+  height: 36rpx;
+  background: #e2e8f0;
+}
+
+.action-btn:active {
+  background: rgba(161, 196, 253, 0.1);
+}
+
+.edit-btn {
+  color: #3b82f6;
+}
+
+.delete-btn {
+  color: #ef4444;
+}
+
+.finish-btn {
+  color: #10b981;
+}
+
+/* 空状态 - 美化升级 */
+.empty-tip {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #94a3b8;
+  font-size: 28rpx;
+}
+
+/* 全部按钮样式 */
+.view-all-btn {
+  text-align: center;
+  padding: 30rpx;
+  background: white;
+  border-radius: 20rpx;
+  margin-top: 20rpx;
+}
+
+.view-all-btn text {
+  font-size: 28rpx;
+  color: #409eff;
+}
+
+/* 更多功能 */
+.more-section {
+  margin: 0 30rpx 40rpx;
+}
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 25rpx;
+}
+.function-list {
+  background: #fff;
+  border-radius: 30rpx;
+  overflow: hidden;
+  box-shadow: 0 6rpx 20rpx rgba(0,0,0,0.05);
+}
+.function-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.function-item:last-child {
+  border-bottom: none;
+}
+.func-left {
+  display: flex;
+  align-items: center;
+}
+.func-icon {
+  font-size: 40rpx;
+  margin-right: 25rpx;
+  width: 60rpx;
+  text-align: center;
+}
+.func-text {
+  display: flex;
+  flex-direction: column;
+}
+.func-name {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+.func-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+.arrow {
+  font-size: 40rpx;
+  color: #ccc;
+}
+
+/* 退出登录 */
+.logout-btn {
+  background: #fff;
+  color: #ff4d4f;
+  text-align: center;
+  padding: 28rpx 0;
+  border-radius: 30rpx;
+  margin: 0 30rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  box-shadow: 0 6rpx 15rpx rgba(0,0,0,0.05);
+}
+
+/* 红点 */
+.red-dot {
+  display: inline-block;
+  width: 32rpx;
+  height: 32rpx;
+  background: #ff4444;
+  color: white;
+  font-size: 20rpx;
+  text-align: center;
+  line-height: 32rpx;
+  border-radius: 50%;
+  margin-left: 8rpx;
+}
+
+/* 申请列表区域 */
+.applications-section {
+  background: #f8f9fa;
+  border-top: 1rpx solid #f0f0f0;
+  padding: 20rpx;
+}
+
+/* 加载中 */
+.apps-loading {
+  text-align: center;
+  padding: 30rpx;
+  color: #999;
+  font-size: 26rpx;
+}
+
+/* 统计栏 */
+.apps-stats {
+  display: flex;
+  gap: 20rpx;
+  padding-bottom: 20rpx;
+  margin-bottom: 20rpx;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.apps-stats .stat {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.apps-stats .stat.pending {
+  color: #fa8c16;
+}
+
+.apps-stats .stat.approved {
+  color: #52c41a;
+}
+
+.apps-stats .stat.rejected {
+  color: #ff4d4f;
+}
+
+/* 申请条目 */
+.application-item {
+  background: white;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.app-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.app-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+}
+
+.app-detail {
+  flex: 1;
+}
+
+.app-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.app-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.app-status {
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.app-status.pending {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.app-status.approved {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.app-status.rejected {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+/* 申请留言 */
+.app-message {
+  background: #f5f5f5;
+  padding: 16rpx;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.message-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.message-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* 操作按钮 */
+.app-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20rpx;
+}
+
+.app-btn {
+  padding: 10rpx 30rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+}
+
+.app-btn.reject {
+  background: #fff1f0;
+  color: #ff4d4f;
+  border: 1rpx solid #ffccc7;
+}
+
+.app-btn.approve {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1rpx solid #b7eb8f;
+}
+
+/* 空状态 */
+.apps-empty {
+  text-align: center;
+  padding: 30rpx;
+  color: #999;
+  font-size: 26rpx;
+}
+
+/* 我的动态入口卡片 */
+.moments-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #b9dcfc 0%,#bbf1f8 50%, #fab3fa 100%);
+  margin: 0 20rpx 20rpx;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+/* 互动区域 */
+.interact-section {
+  background: white;
+  margin: 0 20rpx 20rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  padding: 25rpx 30rpx 10rpx;
+}
+
+.menu-list {
+  padding: 0 30rpx;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+}
+
+.menu-text {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 15rpx;
+}
+
+.menu-count {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.menu-arrow {
+  font-size: 36rpx;
+  color: #ccc;
+}
+/* 解决页面被底部 tabbar 遮挡 */
+.page {
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: 210rpx !important; /* 核心：给 tabbar 留空间 */
+  box-sizing: border-box;
+  min-height: 100vh;
+}

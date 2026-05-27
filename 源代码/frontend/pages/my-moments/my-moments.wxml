@@ -1,0 +1,78 @@
+<!-- pages/my-moments/my-moments.wxml -->
+<view class="my-moments-page">
+
+  <!-- 动态列表 -->
+  <view class="moments-list" wx:if="{{!loading && momentList.length > 0}}">
+    <block wx:for="{{momentList}}" wx:key="id">
+      <view class="moment-card" data-id="{{item.id}}" bindtap="goDetail">
+        <!-- 头部信息 -->
+        <view class="card-header">
+          <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+          <view class="user-info">
+            <view class="nickname">{{userInfo.nickname || '我'}}</view>
+            <view class="time">{{item.createdAt}}</view>
+          </view>
+        </view>
+
+        <!-- 内容 -->
+        <view class="card-content">
+          <view class="title">{{item.title || '动态'}}</view>
+          <view class="content">{{item.content}}</view>
+          
+          <!-- 标签 -->
+          <view class="tags" wx:if="{{item.tags && item.tags.length}}">
+            <text wx:for="{{item.tags}}" wx:key="index" class="tag">{{item}}</text>
+          </view>
+          
+          <!-- 位置 -->
+          <view class="location" wx:if="{{item.location}}">
+            📍 {{item.location}}
+          </view>
+        </view>
+
+        <!-- 图片 -->
+        <view class="card-images" wx:if="{{item.imageUrls && item.imageUrls.length}}">
+          <image 
+            wx:for="{{item.imageUrls}}" 
+            wx:key="index" 
+            src="{{item}}" 
+            mode="aspectFill"
+            data-src="{{item}}"
+            bindtap="previewImage"
+          ></image>
+        </view>
+
+        <!-- 底部操作栏 -->
+        <view class="card-footer">
+          <view class="action-item" data-id="{{item.id}}" catchtap="toggleLike">
+            <text class="{{item.isLiked ? 'active' : ''}}">❤️</text>
+            <text>{{item.likeCount || 0}}</text>
+          </view>
+          <view class="action-item" data-id="{{item.id}}" catchtap="goDetail">
+            <text>💬</text>
+            <text>{{item.commentCount || 0}}</text>
+          </view>
+          <view class="action-item" data-id="{{item.id}}" catchtap="toggleFavorite">
+            <text class="{{item.isFavorited ? 'active' : ''}}">⭐</text>
+            <text>{{item.favoriteCount || 0}}</text>
+          </view>
+          <view class="action-item delete-btn" data-id="{{item.id}}" catchtap="deleteMoment">
+            <text>🗑️ 删除</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!loading && momentList.length === 0}}">
+    <image src="/images/empty.png" mode="aspectFit"></image>
+    <text>暂无动态</text>
+    <button class="publish-btn" bindtap="goPublishMoment">发布第一条动态</button>
+  </view>
+</view>

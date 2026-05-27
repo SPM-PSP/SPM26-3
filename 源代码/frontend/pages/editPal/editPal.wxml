@@ -1,0 +1,146 @@
+<view class="form-container">
+  <view class="form-header">
+    <text class="title">编辑搭子帖</text>
+    <view class="publish-btn" bindtap="updatePal">更新</view>
+  </view>
+
+  <view class="form-section">
+    <text class="section-title">结伴场景*</text>
+    <view class="chip-group">
+      <block wx:for="{{sceneOptions}}" wx:key="value">
+        <view
+          class="chip {{scene === item.value ? 'chip-selected' : ''}}"
+          bindtap="selectScene"
+          data-scene="{{item.value}}"
+        >
+          {{item.label}}
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="form-section">
+    <text class="section-title">帖子标题*</text>
+    <input
+      placeholder="用一句话描述你的结伴需求"
+      class="input input-single"
+      bindinput="setTitle"
+      maxlength="30"
+      value="{{title}}"
+      placeholder-class="input-placeholder"
+    />
+    <text class="char-count">{{title.length}}/30</text>
+  </view>
+
+  <view class="form-section">
+  <text class="section-title">活动地点*</text>
+
+  <!-- 省市区选择 -->
+  <picker
+    mode="region"
+    value="{{region}}"
+    bindchange="onRegionChange"
+  >
+    <view class="picker-display">
+      {{region[0]}} {{region[1]}} {{region[2]}}
+    </view>
+  </picker>
+
+  <!-- 详细地点 -->
+  <input
+    placeholder="请输入详细地点"
+    class="input input-single detail-input"
+    bindinput="setLocationDetail"
+    value="{{locationDetail}}"
+    placeholder-class="input-placeholder"
+  />
+</view>
+
+  <view class="form-section">
+    <text class="section-title">活动时间*</text>
+
+    <picker mode="date" value="{{date}}" bindchange="onDateChange">
+      <view class="picker-display">{{date || '选择日期'}}</view>
+    </picker>
+
+    <picker mode="time" value="{{time}}" bindchange="onTimeChange">
+      <view class="picker-display picker-time">{{time || '选择时间'}}</view>
+    </picker>
+  </view>
+
+  <view class="form-section">
+    <text class="section-title">需求人数</text>
+    <view class="chip-group">
+      <view class="chip {{number == 2 ? 'chip-selected' : ''}}" bindtap="selectNumber" data-num="2">2人</view>
+      <view class="chip {{number == 3 ? 'chip-selected' : ''}}" bindtap="selectNumber" data-num="3">3人</view>
+      <view class="chip {{number == 4 ? 'chip-selected' : ''}}" bindtap="selectNumber" data-num="4">4人</view>
+      <view class="chip {{number == 5 ? 'chip-selected' : ''}}" bindtap="selectNumber" data-num="5">5人</view>
+      <view class="chip {{number == 6 ? 'chip-selected' : ''}}" bindtap="selectNumber" data-num="6">6人+</view>
+    </view>
+  </view>
+
+  <view class="form-section">
+    <text class="section-title">结伴要求标签</text>
+    <view class="chip-group">
+      <block wx:for="{{tagOptions}}" wx:key="name">
+        <view
+          class="chip {{item.active ? 'chip-selected' : ''}}"
+          bindtap="toggleTag"
+          data-tag="{{item.name}}"
+        >
+          {{item.name}}
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="form-section">
+    <text class="section-title">补充说明</text>
+    <textarea
+      placeholder="添加更多活动详情、要求说明…"
+      class="input input-multi"
+      bindinput="setDescription"
+      maxlength="200"
+      value="{{description}}"
+      placeholder-class="textarea-placeholder"
+    />
+    <text class="char-count">{{description.length}}/200</text>
+  </view>
+
+  <!-- 上传图片 -->
+<view class="form-section">
+  <text class="section-title">上传图片（选填）</text>
+
+  <view class="image-grid" wx:if="{{imgList.length > 0}}">
+    <view
+      class="image-item"
+      wx:for="{{imgList}}"
+      wx:key="*this"
+    >
+      <image
+        src="{{item}}"
+        mode="aspectFill"
+        bindtap="previewImage"
+        data-url="{{item}}"
+      />
+      <view
+        class="delete-img"
+        bindtap="deleteImage"
+        data-index="{{index}}"
+      >
+        x
+      </view>
+    </view>
+  </view>
+
+  <view
+    class="upload-btn-like"
+    bindtap="chooseImage"
+    wx:if="{{imgList.length < 9}}"
+  >
+  <text class="upload-btn-text">{{imgList.length > 0 ? '继续上传' : '点击上传'}}</text>
+
+    <text class="upload-count">{{imgList.length}}/9</text>
+  </view>
+  </view>
+</view>
