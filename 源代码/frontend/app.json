@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/home/home",
+    "pages/search/search",
+    "pages/message/message",
+    "pages/profile/profile",
+    "pages/logs/logs",
+    "pages/post-detail/post-detail",
+    "pages/dynamicSquare/dynamicSquare",
+    "pages/releasePal/releasePal",
+    "pages/releaseDynamic/releaseDynamic",
+    "pages/dynamicDetail/dynamicDetail",
+    "pages/chatRoom/chatRoom",
+    "pages/notice/notice",
+    "pages/editPal/editPal",
+    "pages/groupDetail/groupDetail",
+    "pages/edit-profile/edit-profile",
+    "pages/verify/verify",
+    "pages/my-moments/my-moments",
+    "pages/full-list/full-list",
+    "pages/otherProfile/otherProfile",
+    "pages/myApplications/myApplications"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#94a3b8",
+    "selectedColor": "#a1c4fd",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/search/search",
+        "text": "找搭子"
+      },
+      {
+        "pagePath": "pages/releasePal/releasePal",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/message/message",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+  
+}
